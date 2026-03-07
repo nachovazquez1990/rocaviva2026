@@ -14,6 +14,22 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.vercel-storage.com",
       },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+      },
+      {
+        protocol: "https",
+        hostname: "*.cdninstagram.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.behold.so",
+      },
+      {
+        protocol: "https",
+        hostname: "behold.pictures",
+      },
     ],
   },
 };

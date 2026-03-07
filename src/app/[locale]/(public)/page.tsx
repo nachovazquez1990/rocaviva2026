@@ -1,23 +1,83 @@
-import { setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
+import { setRequestLocale, getTranslations } from "next-intl/server";
+import { HeroSection } from "@/components/home/hero-section";
+import { AboutSection } from "@/components/home/about-section";
+import { ServicesSection } from "@/components/home/services-section";
+import { ContactSection } from "@/components/home/contact-section";
+import { FacebookFeed } from "@/components/home/facebook-feed";
 
-export default async function HomePage({
-  params,
-}: {
+type Props = {
   params: Promise<{ locale: string }>;
-}) {
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata" });
+
+  const url = `https://rocaviva.eu/${locale}`;
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: {
+      canonical: url,
+      languages: {
+        es: "https://rocaviva.eu/es",
+        en: "https://rocaviva.eu/en",
+        fr: "https://rocaviva.eu/fr",
+      },
+    },
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      url,
+      siteName: "Rocaviva Eventos",
+      locale: locale === "es" ? "es_ES" : locale === "fr" ? "fr_FR" : "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+    },
+  };
+}
+
+export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Rocaviva Eventos",
+    url: "https://rocaviva.eu",
+    logo: "https://rocaviva.eu/images/rocaviva_logo.svg",
+    description:
+      "Empresa de divulgacion cultural especializada en la difusion de personajes historicos.",
+    foundingDate: "2005",
+    email: "eventos@rocaviva.eu",
+    telephone: ["+34925474267", "+34686519372"],
+    sameAs: [
+      "https://facebook.com/RocavivaEventos/",
+      "https://instagram.com/rocavivaeventos",
+      "https://twitter.com/rocaviva_",
+      "https://youtube.com/@rocavivaeventos",
+      "https://linkedin.com/company/rocaviva-eventos/",
+    ],
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="font-display text-6xl font-bold tracking-tight text-neutral-900">
-          Rocaviva Eventos
-        </h1>
-        <p className="mt-4 text-xl text-neutral-500">
-          Sitio en construccion - Rediseno 2026
-        </p>
-      </div>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <HeroSection />
+      <AboutSection />
+      <ServicesSection />
+      <FacebookFeed />
+      <ContactSection />
+    </>
   );
 }

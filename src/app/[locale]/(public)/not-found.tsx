@@ -1,0 +1,37 @@
+import { useTranslations } from "next-intl";
+import { Link } from "@/lib/i18n/navigation";
+
+export default function NotFound() {
+  const t = useTranslations("notFound");
+
+  return (
+    <section className="min-h-[60vh] flex flex-col items-center justify-center px-6 text-center">
+      <span className="font-display text-[8rem] sm:text-[12rem] font-bold leading-none text-brand-100 select-none">
+        404
+      </span>
+
+      <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 -mt-6 sm:-mt-10">
+        {t("title")}
+      </h1>
+
+      <p className="text-neutral-500 text-base sm:text-lg max-w-md mt-4">
+        {t("description")}
+      </p>
+
+      <div className="flex flex-col sm:flex-row gap-4 mt-10">
+        <Link
+          href="/"
+          className="inline-block px-8 py-3.5 text-xs font-medium tracking-[0.15em] uppercase bg-brand-600 text-white hover:bg-brand-700 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+        >
+          {t("backHome")}
+        </Link>
+        <Link
+          href="/projects"
+          className="inline-block px-8 py-3.5 text-xs font-medium tracking-[0.15em] uppercase border border-neutral-300 text-neutral-700 hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+        >
+          {t("backProjects")}
+        </Link>
+      </div>
+    </section>
+  );
+}

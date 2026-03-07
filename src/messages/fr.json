@@ -1,7 +1,10 @@
 {
   "metadata": {
     "title": "Rocaviva Eventos | Expositions Culturelles et Historiques",
-    "description": "Entreprise leader dans l'organisation d'expositions culturelles itinerantes sur des personnages historiques. Femmes Nobel, science, litterature et plus."
+    "description": "Entreprise leader dans l'organisation d'expositions culturelles itinerantes sur des personnages historiques. Femmes Nobel, science, litterature et plus.",
+    "projectsDescription": "Decouvrez les projets d'expositions culturelles de Rocaviva Eventos : Femmes Nobel, Marie Curie, Teresa de Jesus, Astronautes et plus.",
+    "communicationDescription": "Couverture mediatique de Rocaviva Eventos : presse, radio, television et video sur nos expositions culturelles.",
+    "booksDescription": "Telechargez les livres de Rocaviva Eventos sur les personnages historiques et les expositions culturelles."
   },
   "nav": {
     "home": "Accueil",
@@ -13,13 +16,41 @@
     "admin": "Administration"
   },
   "home": {
-    "heroSubtitle": "Des expositions culturelles qui inspirent",
-    "latestExhibition": "Derniere exposition",
-    "moreInfo": "Plus d'informations",
+    "heroTitle": "Rocaviva Eventos",
+    "heroSubtitle": "Diffusion culturelle et historique",
+    "heroCta": "Decouvrez nos projets",
     "aboutTitle": "Qui Sommes-Nous",
+    "aboutIntro": "Rocaviva Eventos est une entreprise de diffusion culturelle specialisee dans la mise en valeur de personnages historiques, principalement feminins. Fondee en 2005, elle a realise des expositions a succes de rayonnement international, parmi lesquelles se distinguent :",
+    "aboutExhibition1": "Maria Sklodowska-Curie. Une Polonaise a Paris",
+    "aboutExhibition2": "Teresa de Jesus. Coeur en Espagne, ame en Amerique",
+    "aboutExhibition3": "Femmes Nobel",
+    "aboutExhibition4": "Femmes Astronautes",
+    "aboutProjects": "Ses projets ont un caractere global et offrent plusieurs approches pour rapprocher la thematique du public dans des contextes tres differents. Ainsi, les expositions sont completees par des visites guidees, des conferences, des lectures dramatisees, des ateliers, des plantations d'arbres ou de rosiers dans des jardins publics dedies au personnage, la denomination de laboratoires de recherche ou de rues...",
+    "aboutCollaborators": "Parmi ses collaborateurs figurent des specialistes de prestige international reconnu dans differents domaines, tels que l'acteur Manuel Galiana, les scientifiques Maria Vallet, Pierre Joliot et Helene Langevin Joliot — petits-enfants de Marie Curie —, des chanteurs comme le baryton Carlos Alvarez, ou des journalistes comme Antonio Garate.",
+    "aboutNobel": "Parmi ses actions d'exposition, il convient de souligner Femmes Nobel, a laquelle ont collabore les laureates elles-memes, leurs familles ou les fondations qui preservent leurs heritages, ainsi que le Musee Nobel de Stockholm, l'Institut Nobel d'Oslo et de nombreuses ambassades et universites. Plusieurs femmes laureates du Prix Nobel, comme Elizabeth Blackburn (Nobel de Medecine 2009), May-Britt Moser (Prix Nobel de Medecine 2014) ou Ouided Bouchamaoui (Prix Nobel de la Paix 2015), ont assiste a des inaugurations de differents sites de l'exposition et ont participe a des evenements paralleles.",
+    "aboutReadings": "Les lectures dramatisees sur la vie de divers personnages sont particulierement remarquables par leur rigueur historique absolue, car les oeuvres sont basees sur leurs propres ecrits : Pierre et Marie Curie. Eux-memes et Concha Espina. Lumiere et tenebres. Les lectures beneficient de la participation du grand acteur Manuel Galiana.",
+    "aboutYoTeAplaudo": "Pendant la pandemie, Rocaviva a organise la campagne a succes #YoTeAplaudo en collaboration avec l'Institut de Recherche Sanitaire de l'Hopital Universitaire 12 de Octubre de Madrid, dans laquelle 55 personnalites du monde de la Science, de la Culture, de l'Art et du Sport ont envoye des messages d'encouragement a ceux qui risquaient leur vie en premiere ligne.",
     "servicesTitle": "Nos Services",
-    "contactTitle": "Contactez-nous",
-    "contactCta": "Organisez votre exposition avec nous"
+    "serviceExhibitions": "Expositions Itinerantes",
+    "serviceExhibitionsDesc": "Expositions culturelles de prestige international sur des personnages historiques, presentees dans des musees, universites et centres culturels du monde entier.",
+    "serviceGuidedTours": "Visites Guidees",
+    "serviceGuidedToursDesc": "Parcours didactiques des expositions avec des guides specialises qui rapprochent le public de la vie et l'oeuvre des personnages.",
+    "serviceConferences": "Conferences",
+    "serviceConferencesDesc": "Interventions et conferences donnees par des specialistes de prestige international reconnu dans chacune des thematiques.",
+    "serviceReadings": "Lectures Dramatisees",
+    "serviceReadingsDesc": "Representations basees sur les propres ecrits des personnages historiques, avec la participation d'acteurs de premier plan.",
+    "serviceWorkshops": "Ateliers",
+    "serviceWorkshopsDesc": "Activites educatives et ateliers thematiques concus pour rapprocher la science, la culture et l'histoire de tous les publics.",
+    "serviceCommemorations": "Actions Commemoratives",
+    "serviceCommemorationsDesc": "Plantations d'arbres, denomination de laboratoires, de rues et autres hommages permanents aux personnages.",
+    "contactTitle": "Contact",
+    "contactCta": "Organisez votre exposition avec nous",
+    "contactButton": "Ecrivez-nous",
+    "socialTitle": "Suivez-nous",
+    "socialFollow": "Suivez-nous sur Instagram",
+    "socialViewPost": "Voir la publication",
+    "latestExhibition": "Derniere exposition",
+    "moreInfo": "Plus d'informations"
   },
   "projects": {
     "title": "Projets",
@@ -27,18 +58,33 @@
     "exhibitions": "Itinerances",
     "gallery": "Galerie",
     "from": "du",
-    "to": "au"
+    "to": "au",
+    "viewProject": "Voir le projet",
+    "previousProject": "Projet precedent",
+    "nextProject": "Projet suivant",
+    "noProjects": "Aucun projet disponible",
+    "swipeHint": "Glissez pour explorer",
+    "viewExhibition": "Voir l'exposition",
+    "backToProject": "Retour au projet",
+    "venue": "Lieu",
+    "dates": "Dates"
   },
   "communication": {
     "title": "Presse et Medias",
+    "subtitle": "Couverture mediatique de nos projets",
     "readArticle": "Lire l'article",
     "listenProgram": "Ecouter le programme",
     "watchVideo": "Voir le programme",
+    "watchTv": "Voir le programme",
     "all": "Tous",
     "press": "Presse",
     "radio": "Radio",
     "tv": "Television",
-    "video": "Video"
+    "video": "Video",
+    "noResults": "Aucune nouvelle disponible",
+    "noResultsFilter": "Aucune nouvelle de ce type",
+    "loadMore": "Charger plus",
+    "showing": "Affichage de {count} sur {total}"
   },
   "books": {
     "title": "Livres",
@@ -54,10 +100,14 @@
     "download": "Telecharger",
     "downloadPart1": "Telecharger Partie 1",
     "downloadPart2": "Telecharger Partie 2",
-    "thankYou": "Merci pour votre interet"
+    "part": "Partie",
+    "thankYou": "Merci pour votre interet",
+    "serverError": "Une erreur s'est produite. Veuillez reessayer."
   },
   "collaborators": {
-    "title": "Partenaires"
+    "title": "Partenaires",
+    "subtitle": "Institutions et organismes qui ont rendu nos projets possibles",
+    "visitWebsite": "Visiter le site web"
   },
   "footer": {
     "rights": "Tous droits reserves",
@@ -67,5 +117,17 @@
   },
   "loading": {
     "text": "Chargement..."
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "description": "Desolee, la page que vous recherchez n'existe pas ou a ete deplacee.",
+    "backHome": "Retour a l'accueil",
+    "backProjects": "Voir les projets"
+  },
+  "error": {
+    "title": "Une erreur est survenue",
+    "description": "Une erreur inattendue s'est produite. Veuillez reessayer.",
+    "retry": "Reessayer",
+    "backHome": "Retour a l'accueil"
   }
 }

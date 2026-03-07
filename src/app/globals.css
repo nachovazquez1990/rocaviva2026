@@ -1,48 +1,55 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme inline {
-  /* Brand Colors - Inspired by Rocaviva's vibrant logo */
-  --color-brand-50: #fef7ed;
-  --color-brand-100: #fdecd4;
-  --color-brand-200: #fad5a8;
-  --color-brand-300: #f6b871;
-  --color-brand-400: #f19038;
-  --color-brand-500: #ee7414;
-  --color-brand-600: #df5a0a;
-  --color-brand-700: #b9420b;
-  --color-brand-800: #933510;
-  --color-brand-900: #772e11;
-  --color-brand-950: #401406;
+  /* Brand Colors - Rocaviva Red #c32e25 */
+  --color-brand-50: #fef2f2;
+  --color-brand-100: #fde3e1;
+  --color-brand-200: #fccbc8;
+  --color-brand-300: #f9a8a3;
+  --color-brand-400: #f4726b;
+  --color-brand-500: #e84b42;
+  --color-brand-600: #c32e25;
+  --color-brand-700: #a4231b;
+  --color-brand-800: #882115;
+  --color-brand-900: #751f17;
+  --color-brand-950: #400c08;
 
-  /* Accent - Deep cultural blue */
-  --color-accent-50: #eff6ff;
-  --color-accent-100: #dbeafe;
-  --color-accent-200: #bfdbfe;
-  --color-accent-300: #93c5fd;
-  --color-accent-400: #60a5fa;
-  --color-accent-500: #2563eb;
-  --color-accent-600: #1d4ed8;
-  --color-accent-700: #1e40af;
-  --color-accent-800: #1e3a8a;
-  --color-accent-900: #1e3050;
-  --color-accent-950: #0f1729;
+  /* Accent - Deep Navy (option A - default) */
+  --color-accent-50: #f0f4f8;
+  --color-accent-100: #d9e2ec;
+  --color-accent-200: #bcccdc;
+  --color-accent-300: #9fb3c8;
+  --color-accent-400: #7b9ab8;
+  --color-accent-500: #4a6fa5;
+  --color-accent-600: #334e7b;
+  --color-accent-700: #243b5e;
+  --color-accent-800: #1a2d47;
+  --color-accent-900: #102035;
+  --color-accent-950: #0a1628;
 
-  /* Neutral */
-  --color-neutral-50: #fafafa;
-  --color-neutral-100: #f5f5f5;
-  --color-neutral-200: #e5e5e5;
-  --color-neutral-300: #d4d4d4;
-  --color-neutral-400: #a3a3a3;
-  --color-neutral-500: #737373;
-  --color-neutral-600: #525252;
-  --color-neutral-700: #404040;
-  --color-neutral-800: #262626;
-  --color-neutral-900: #171717;
-  --color-neutral-950: #0a0a0a;
+  /* Neutral - Warm tinted */
+  --color-neutral-50: #fafaf9;
+  --color-neutral-100: #f5f5f4;
+  --color-neutral-200: #e7e5e4;
+  --color-neutral-300: #d6d3d1;
+  --color-neutral-400: #a8a29e;
+  --color-neutral-500: #78716c;
+  --color-neutral-600: #57534e;
+  --color-neutral-700: #44403c;
+  --color-neutral-800: #292524;
+  --color-neutral-900: #1c1917;
+  --color-neutral-950: #0c0a09;
+
+  /* Semantic */
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+  --color-info: #2563eb;
 
   /* Typography */
   --font-sans: var(--font-inter);
-  --font-display: var(--font-playfair);
+  --font-display: var(--font-bodoni);
 
   /* Animation */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -73,4 +80,30 @@ html {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Marquee animation for collaborators */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -1,4 +1,8 @@
 import { setRequestLocale } from "next-intl/server";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
+import { LoadingScreen } from "@/components/layout/loading-screen";
+import { PageTracker } from "@/components/analytics/tracker";
 
 export default async function PublicLayout({
   children,
@@ -11,10 +15,12 @@ export default async function PublicLayout({
   setRequestLocale(locale);
 
   return (
-    <>
-      {/* Header will go here */}
-      <main>{children}</main>
-      {/* Footer will go here */}
-    </>
+    <div className="flex flex-col min-h-screen">
+      <PageTracker locale={locale} />
+      <LoadingScreen />
+      <Header />
+      <main id="main-content" className="pt-20 flex-1">{children}</main>
+      <Footer />
+    </div>
   );
 }

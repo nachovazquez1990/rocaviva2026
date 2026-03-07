@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Bodoni_Moda } from "next/font/google";
 import { locales, type Locale } from "@/lib/i18n/config";
 
 const inter = Inter({
@@ -11,8 +11,8 @@ const inter = Inter({
   display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const bodoni = Bodoni_Moda({
+  variable: "--font-bodoni",
   subsets: ["latin", "latin-ext"],
   display: "swap",
 });
@@ -57,6 +57,14 @@ export async function generateMetadata({
       title: meta.title,
       description: meta.description,
     },
+    icons: {
+      icon: [
+        { url: "/favicon.svg", type: "image/svg+xml" },
+        { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+        { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      ],
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    },
     robots: {
       index: true,
       follow: true,
@@ -81,7 +89,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${inter.variable} ${playfair.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${bodoni.variable}`}>
       <body className="font-sans antialiased bg-neutral-50 text-neutral-900">
         <NextIntlClientProvider messages={messages}>
           {children}
