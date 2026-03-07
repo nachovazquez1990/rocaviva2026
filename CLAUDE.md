@@ -182,4 +182,4 @@ Key tables:
 - Timeline component for exhibitions uses metro-stop metaphor
 - Book download requires form completion (data stored in Supabase)
 - Admin CMS behind Supabase Auth (email/password)
-- Facebook integration via Behold (not Instagram this time)
+- Instagram feed via Behold widget (feed ID in NEXT_PUBLIC_BEHOLD_FEED_ID)

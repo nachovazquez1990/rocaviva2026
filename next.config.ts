@@ -28,6 +28,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "*.behold.pictures",
+      },
+      {
+        protocol: "https",
         hostname: "behold.pictures",
       },
     ],

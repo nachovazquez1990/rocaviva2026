@@ -4,7 +4,7 @@ import { HeroSection } from "@/components/home/hero-section";
 import { AboutSection } from "@/components/home/about-section";
 import { ServicesSection } from "@/components/home/services-section";
 import { ContactSection } from "@/components/home/contact-section";
-import { FacebookFeed } from "@/components/home/facebook-feed";
+import { InstagramFeed } from "@/components/home/instagram-feed";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -76,7 +76,7 @@ export default async function HomePage({ params }: Props) {
       <HeroSection />
       <AboutSection />
       <ServicesSection />
-      <FacebookFeed />
+      <InstagramFeed />
       <ContactSection />
     </>
   );

@@ -37,7 +37,7 @@ interface BeholdFeed {
   posts: BeholdPost[];
 }
 
-export function FacebookFeed() {
+export function InstagramFeed() {
   const t = useTranslations("home");
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
