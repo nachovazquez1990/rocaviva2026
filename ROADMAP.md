@@ -31,19 +31,19 @@ Marca [x] cuando este completada.
       Verificar: .github/workflows/version-tag.yml (patch/minor/major)
 - [x] T0B.6 - Documentar flujo Git completo
       Verificar: GIT-WORKFLOW.md con ramas, commits, versionado
-- [ ] T0B.7 - Crear repositorio en GitHub (rocaviva2026)
+- [x] T0B.7 - Crear repositorio en GitHub (rocaviva2026)
       Verificar: repo creado, remote configurado
-- [ ] T0B.8 - Crear rama dev desde main
+- [x] T0B.8 - Crear rama dev desde main
       Verificar: `git branch -a` muestra main y dev
-- [ ] T0B.9 - Commit inicial y push a main + dev
+- [x] T0B.9 - Commit inicial y push a main + dev
       Verificar: codigo visible en GitHub en ambas ramas
-- [ ] T0B.10 - Conectar Vercel con GitHub repo
-      Verificar: deploy automatico al hacer push
-- [ ] T0B.11 - Configurar Vercel: dev -> preview domain, main -> production
-      Verificar: push a dev despliega en dominio gratuito de Vercel
-- [ ] T0B.12 - Configurar branch protection en GitHub (main y dev)
+- [x] T0B.10 - Conectar Vercel con GitHub repo
+      Verificar: deploy automatico al hacer push -> rocaviva.vercel.app
+- [x] T0B.11 - Configurar Vercel: dev -> preview domain, main -> production
+      Verificar: main = rocaviva.vercel.app, dev/PRs = preview automatico
+- [x] T0B.12 - Configurar branch protection en GitHub (main y dev)
       Verificar: no se puede hacer push directo a main ni dev
-- [ ] T0B.13 - Configurar secrets en GitHub (Supabase keys, Vercel token)
+- [x] T0B.13 - Configurar secrets en GitHub (Supabase keys, Vercel token)
       Verificar: CI puede hacer build con las env vars
 
 **CHECKPOINT: Push a dev ejecuta CI y despliega en Vercel preview. PR a main ejecuta CI + Lighthouse.**
