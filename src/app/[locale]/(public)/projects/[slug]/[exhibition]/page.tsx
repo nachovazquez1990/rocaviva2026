@@ -197,7 +197,6 @@ function getMockData(
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, exhibition: exhibitionSlug } = await params;
-  const t = await getTranslations({ locale, namespace: "projects" });
 
   const project = await getProject(slug);
   const dbExhibition =

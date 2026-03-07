@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "@/lib/i18n/navigation";
-import { useTranslations } from "next-intl";
 
 const STOP_MIN_WIDTH = 130;
 const FILL_STEP_MS = 40;
@@ -23,7 +22,6 @@ export function MetroTimeline({
   projectSlug,
   exhibitions,
 }: MetroTimelineProps) {
-  const t = useTranslations("projects");
   const containerRef = useRef<HTMLDivElement>(null);
   const [stopsPerRow, setStopsPerRow] = useState(4);
   const [fillingTarget, setFillingTarget] = useState<number | null>(null);
@@ -47,7 +45,7 @@ export function MetroTimeline({
 
   // Reset fill when exhibitions change (slide change)
   useEffect(() => {
-    setFillingTarget(null);
+    setFillingTarget(null); // eslint-disable-line react-hooks/set-state-in-effect -- reset on prop change
   }, [exhibitions]);
 
   // Split exhibitions into rows, distributing evenly

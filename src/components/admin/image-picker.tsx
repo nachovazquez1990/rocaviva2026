@@ -36,7 +36,8 @@ export function ImagePicker({ value, onChange, folder = "news", label }: ImagePi
   }, []);
 
   useEffect(() => {
-    if (showPicker) loadExistingImages();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetching images from external system (Supabase)
+    if (showPicker) void loadExistingImages();
   }, [showPicker, loadExistingImages]);
 
   return (

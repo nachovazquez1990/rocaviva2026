@@ -48,7 +48,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
       setDirection(dir);
       setCurrent(index);
     },
-    [total]
+    []
   );
 
   const next = useCallback(() => {

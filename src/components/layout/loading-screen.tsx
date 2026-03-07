@@ -16,11 +16,10 @@ export function LoadingScreen() {
     const seen = sessionStorage.getItem("rocaviva-loaded");
     if (!seen) {
       if (prefersReducedMotion) {
-        // Skip loading screen entirely for reduced motion users
         sessionStorage.setItem("rocaviva-loaded", "1");
         return;
       }
-      setShow(true);
+      setShow(true); // eslint-disable-line react-hooks/set-state-in-effect -- synchronizing with sessionStorage
       const timer = setTimeout(() => {
         setShow(false);
         sessionStorage.setItem("rocaviva-loaded", "1");

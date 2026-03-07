@@ -76,7 +76,8 @@ export default function ExhibitionsAdminPage() {
   }, [supabase]);
 
   useEffect(() => {
-    fetchData();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial data fetch from external system (Supabase)
+    void fetchData();
   }, [fetchData]);
 
   async function loadGallery(exhibitionId: string) {

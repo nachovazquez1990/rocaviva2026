@@ -27,7 +27,8 @@ export default function DownloadsAdminPage() {
   }, [supabase]);
 
   useEffect(() => {
-    fetchItems();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial data fetch from external system (Supabase)
+    void fetchItems();
   }, [fetchItems]);
 
   function exportCSV() {
@@ -131,7 +132,7 @@ export default function DownloadsAdminPage() {
               .slice(0, 10)
               .map((item) => (
                 <div key={item.id} className="bg-white border border-neutral-200 p-4">
-                  <p className="text-sm text-neutral-700 italic">"{item.comments}"</p>
+                  <p className="text-sm text-neutral-700 italic">&ldquo;{item.comments}&rdquo;</p>
                   <p className="text-xs text-neutral-400 mt-1">
                     — {item.name}, {new Date(item.created_at).toLocaleDateString("es-ES")}
                   </p>

@@ -16,7 +16,7 @@ export function LogoMarquee({ collaborators, visitWebsiteLabel }: LogoMarqueePro
 
   useEffect(() => {
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mql.matches);
+    setPrefersReducedMotion(mql.matches); // eslint-disable-line react-hooks/set-state-in-effect -- subscribing to media query
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
     mql.addEventListener("change", handler);
     return () => mql.removeEventListener("change", handler);
@@ -33,7 +33,6 @@ export function LogoMarquee({ collaborators, visitWebsiteLabel }: LogoMarqueePro
 
   // Duplicate for seamless loop
   const items = [...collaborators, ...collaborators];
-  const shouldAnimate = !prefersReducedMotion && !isPaused;
   const duration = collaborators.length * 3;
 
   return (

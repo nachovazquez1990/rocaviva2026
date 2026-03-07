@@ -40,7 +40,8 @@ export default function HomeContentAdminPage() {
   }, [supabase]);
 
   useEffect(() => {
-    fetchItems();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial data fetch from external system (Supabase)
+    void fetchItems();
   }, [fetchItems]);
 
   function updateField(key: string, lang: string, value: string) {
