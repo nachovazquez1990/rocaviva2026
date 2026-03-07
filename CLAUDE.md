@@ -22,8 +22,34 @@ The goal is a modern, elegant, award-worthy website with exceptional UX/UI, anim
 - **Deployment:** Vercel
 - **Image hosting:** Vercel Blob (optimized with next/image)
 - **i18n:** next-intl (ES, EN, FR)
-- **Facebook feed:** Behold widget (Facebook integration)
+- **Instagram feed:** Behold widget (Instagram integration, feed ID in NEXT_PUBLIC_BEHOLD_FEED_ID)
 - **Version control:** Git + GitHub
+
+## Design System Decisions
+- **Brand color:** #c32e25 (Rocaviva Red) at 600, full 50-950 palette
+- **Accent color:** Navy (#334e7b at 600)
+- **Neutrals:** Warm stone tinted (not pure gray)
+- **Semantic:** Classic green/yellow/red/blue
+- **Light mode only** (no dark mode)
+- **Display font:** Bodoni Moda (serif, dramatic scale, italic for quotes)
+- **Body font:** Inter (sans-serif)
+- **Typography scale:** Dramatic — Display up to 9xl, large contrast with body
+- **Buttons:** Sharp (no border-radius), color change on hover (no fill animation)
+- **Inputs:** Underline style (bottom border only)
+- **Cards:** No border, white on neutral-50, subtle shadow on hover
+- **Animations:** Medium level — fadeInUp, stagger, parallax, scale on hover
+- **Reference site:** teamlab.art (but light mode version — clean, minimal, image-forward)
+
+## Admin CMS Architecture
+- Login: `/[locale]/admin/login` (public, no auth required)
+- Protected routes: `/[locale]/admin/*` via `(dashboard)` route group with auth layout
+- Auth check in `(dashboard)/layout.tsx` using Supabase server client
+- CRUD pages use client-side Supabase (browser client) with RLS for security
+- Analytics: `page_views` + `analytics_events` tables in Supabase
+- Tracking: `PageTracker` client component in public layout + `/api/track` API route
+- Country detection via Vercel `x-vercel-ip-country` header
+- Admin UI in Spanish only (no i18n for admin)
+- Tri-lingual content editing via `LocalizedInputs` component (ES/EN/FR tabs)
 
 ## Architecture Decisions
 - App Router with route groups for `(public)` and `(admin)`
@@ -151,9 +177,9 @@ Key tables:
 
 ## Important Notes
 - The site must be fully responsive (mobile-first approach)
-- Loading screen appears only on initial visit (session-based)
+- Loading screen removed from public layout (kept as component for potential future use)
 - Navigation must be impressive on both desktop and mobile
 - Timeline component for exhibitions uses metro-stop metaphor
 - Book download requires form completion (data stored in Supabase)
 - Admin CMS behind Supabase Auth (email/password)
-- Facebook integration via Behold (not Instagram this time)
+- Instagram feed via Behold widget (feed ID in NEXT_PUBLIC_BEHOLD_FEED_ID)

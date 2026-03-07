@@ -91,6 +91,15 @@ export interface Book {
   updated_at: string;
 }
 
+export interface BookFile {
+  id: string;
+  book_id: string;
+  file_url: string;
+  label: string | null;
+  part_number: number;
+  created_at: string;
+}
+
 export interface BookDownload {
   id: string;
   book_id: string | null;
@@ -121,16 +130,42 @@ export interface HomeContent {
   updated_at: string;
 }
 
+export interface PageView {
+  id: string;
+  page_path: string;
+  locale: string | null;
+  country: string | null;
+  city: string | null;
+  referrer: string | null;
+  user_agent: string | null;
+  device_type: "desktop" | "mobile" | "tablet" | null;
+  session_id: string | null;
+  is_new_visitor: boolean;
+  created_at: string;
+}
+
+export interface AnalyticsEvent {
+  id: string;
+  event_type: "click" | "download" | "form_submit" | "dossier_download";
+  element_id: string | null;
+  element_text: string | null;
+  page_path: string | null;
+  metadata: Record<string, unknown> | null;
+  session_id: string | null;
+  created_at: string;
+}
+
 // Helper type to get localized field
 export type LocalizedField<T> = T extends { [K in `${string}_es`]: infer V } ? V : never;
 
 // Utility to get the right locale field
-export function getLocalizedField<T extends Record<string, unknown>>(
-  item: T,
+export function getLocalizedField(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  item: any,
   field: string,
   locale: string
 ): string {
-  const key = `${field}_${locale}` as keyof T;
-  const fallbackKey = `${field}_es` as keyof T;
+  const key = `${field}_${locale}`;
+  const fallbackKey = `${field}_es`;
   return (item[key] as string) || (item[fallbackKey] as string) || "";
 }
