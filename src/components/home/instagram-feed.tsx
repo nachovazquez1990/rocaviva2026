@@ -171,7 +171,7 @@ function InstagramPost({
           <p className="text-white text-xs md:text-sm leading-relaxed line-clamp-3">
             {truncated}
           </p>
-          <div className="flex items-center gap-3 mt-2 text-white/70 text-xs">
+          <div className="flex items-center gap-3 mt-2 text-white/90 text-xs">
             <span aria-hidden="true">&#9825; {post.likeCount}</span>
             <span aria-hidden="true">&#9901; {post.commentsCount}</span>
           </div>

@@ -121,10 +121,10 @@ export function Header() {
                     isTransparentDark
                       ? isActive
                         ? "text-white"
-                        : "text-white/70 hover:text-white"
+                        : "text-white/90 hover:text-white"
                       : isActive
                         ? "text-brand-600"
-                        : "text-neutral-500 hover:text-neutral-900"
+                        : "text-neutral-600 hover:text-neutral-900"
                   )}
                 >
                   {t(item.key)}
@@ -206,7 +206,7 @@ export function Header() {
                       aria-current={isActive ? "page" : undefined}
                       className={cn(
                         "font-display text-3xl font-bold tracking-[0.05em] uppercase transition-opacity focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-4",
-                        isActive ? "text-white" : "text-white/70 hover:text-white"
+                        isActive ? "text-white" : "text-white/90 hover:text-white"
                       )}
                     >
                       {t(item.key)}

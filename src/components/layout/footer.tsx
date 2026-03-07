@@ -23,7 +23,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-neutral-900 text-neutral-400" role="contentinfo">
+    <footer className="bg-neutral-900 text-neutral-300" role="contentinfo">
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
           {/* Brand */}
@@ -38,7 +38,7 @@ export function Footer() {
 
           {/* Navigation */}
           <div>
-            <h3 className="text-xs font-medium tracking-[0.2em] uppercase text-neutral-500 mb-4">
+            <h3 className="text-xs font-medium tracking-[0.2em] uppercase text-neutral-400 mb-4">
               Navegacion
             </h3>
             <nav aria-label="Footer navigation">
@@ -47,7 +47,7 @@ export function Footer() {
                   <li key={item.key}>
                     <Link
                       href={item.href}
-                      className="text-sm text-neutral-400 hover:text-white transition-colors"
+                      className="text-sm text-neutral-300 hover:text-white transition-colors"
                     >
                       {t(item.key)}
                     </Link>
@@ -59,7 +59,7 @@ export function Footer() {
 
           {/* Social + Legal */}
           <div>
-            <h3 className="text-xs font-medium tracking-[0.2em] uppercase text-neutral-500 mb-4">
+            <h3 className="text-xs font-medium tracking-[0.2em] uppercase text-neutral-400 mb-4">
               Redes sociales
             </h3>
             <div className="flex gap-4 mb-8">
@@ -70,14 +70,14 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${link.label} (opens in new window)`}
-                  className="text-neutral-500 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+                  className="text-neutral-400 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
                 >
                   <link.icon />
                 </a>
               ))}
             </div>
 
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-600">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-400">
               <span>{tFooter("privacy")}</span>
               <span>{tFooter("legal")}</span>
               <span>{tFooter("cookies")}</span>
@@ -87,7 +87,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-neutral-800">
-          <p className="text-xs text-neutral-600">
+          <p className="text-xs text-neutral-400">
             &copy; {year} Rocaviva Eventos. {tFooter("rights")}.
           </p>
         </div>

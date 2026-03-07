@@ -5,7 +5,7 @@
  * Example: node scripts/audit.mjs http://localhost:3000 --mobile
  */
 import lighthouse from "lighthouse";
-import * as chromeLauncher from "lighthouse/chrome-launcher/index.js";
+import * as chromeLauncher from "chrome-launcher";
 
 const url = process.argv[2] || "http://localhost:3000";
 const isMobile = process.argv.includes("--mobile");

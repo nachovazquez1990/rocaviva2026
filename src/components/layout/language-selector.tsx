@@ -37,7 +37,7 @@ export function LanguageSelector({ variant = "default", size = "default" }: Lang
               className={cn(
                 "mx-1",
                 isLg ? "text-base" : "text-xs",
-                isLight ? "text-white/30" : "text-neutral-300"
+                isLight ? "text-white/60" : "text-neutral-300"
               )}
               aria-hidden="true"
             >
@@ -54,7 +54,7 @@ export function LanguageSelector({ variant = "default", size = "default" }: Lang
               isLight
                 ? locale === currentLocale
                   ? "text-white"
-                  : "text-white/50 hover:text-white"
+                  : "text-white/80 hover:text-white"
                 : locale === currentLocale
                   ? "text-brand-600"
                   : "text-neutral-400 hover:text-neutral-900"

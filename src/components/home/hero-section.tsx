@@ -46,7 +46,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease }}
-          className="text-xs tracking-[0.35em] uppercase text-white/70 mb-6"
+          className="text-xs tracking-[0.35em] uppercase text-white/90 mb-6"
         >
           {t("heroSubtitle")}
         </motion.p>
@@ -54,7 +54,7 @@ export function HeroSection() {
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4, ease }}
+          transition={{ duration: 1, delay: 0.1, ease }}
           className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight text-white"
         >
           ROCAVIVA
@@ -64,7 +64,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6, ease }}
-          className="font-display text-lg sm:text-xl md:text-2xl tracking-[0.3em] uppercase text-white/80 mt-2"
+          className="font-display text-lg sm:text-xl md:text-2xl tracking-[0.3em] uppercase text-white mt-2"
         >
           EVENTOS
         </motion.span>
@@ -77,7 +77,7 @@ export function HeroSection() {
         >
           <Link
             href="/projects"
-            className="inline-block px-10 py-4 text-xs font-medium tracking-[0.2em] uppercase text-white border border-white/40 hover:bg-white hover:text-neutral-900 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="inline-block px-10 py-4 text-xs font-medium tracking-[0.2em] uppercase text-white border border-white/60 hover:bg-white hover:text-neutral-900 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             {t("heroCta")}
           </Link>

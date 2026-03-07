@@ -29,7 +29,7 @@ export function ContactSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.8, delay: 0.15, ease }}
-          className="text-lg md:text-xl text-neutral-400 mb-12 max-w-2xl mx-auto"
+          className="text-lg md:text-xl text-neutral-300 mb-12 max-w-2xl mx-auto"
         >
           {t("contactCta")}
         </motion.p>

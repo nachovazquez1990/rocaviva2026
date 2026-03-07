@@ -188,7 +188,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4, ease }}
-              className="inline-flex items-center gap-2 mt-6 text-xs tracking-[0.2em] uppercase text-white/70 group-hover:text-white transition-colors duration-300"
+              className="inline-flex items-center gap-2 mt-6 text-xs tracking-[0.2em] uppercase text-white/90 group-hover:text-white transition-colors duration-300"
             >
               {t("viewProject")}
               <ChevronRight className="w-4 h-4" />
@@ -202,7 +202,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
         <button
           onClick={prev}
           aria-label={t("previousProject")}
-          className="p-3 text-white/50 hover:text-white transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="p-3 text-white/80 hover:text-white transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           <ChevronLeft className="w-8 h-8" />
         </button>
@@ -211,7 +211,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
         <button
           onClick={next}
           aria-label={t("nextProject")}
-          className="p-3 text-white/50 hover:text-white transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="p-3 text-white/80 hover:text-white transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           <ChevronRight className="w-8 h-8" />
         </button>
@@ -236,8 +236,8 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
               }}
               className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-sm rounded-full"
             >
-              <MoveHorizontal className="w-4 h-4 text-white/60" />
-              <span className="text-[10px] tracking-[0.15em] uppercase text-white/60">
+              <MoveHorizontal className="w-4 h-4 text-white/80" />
+              <span className="text-[10px] tracking-[0.15em] uppercase text-white/80">
                 {t("swipeHint")}
               </span>
             </motion.div>
@@ -259,14 +259,14 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
               className={`h-0.5 transition-all duration-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white ${
                 i === current
                   ? "w-8 bg-white"
-                  : "w-4 bg-white/30 hover:bg-white/50"
+                  : "w-4 bg-white/50 hover:bg-white/70"
               }`}
             />
           ))}
         </div>
 
         {/* Counter */}
-        <span className="text-xs tracking-widest text-white/50 font-mono tabular-nums">
+        <span className="text-xs tracking-widest text-white/80 font-mono tabular-nums">
           {String(current + 1).padStart(2, "0")} /{" "}
           {String(total).padStart(2, "0")}
         </span>

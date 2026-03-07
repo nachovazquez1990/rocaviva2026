@@ -148,7 +148,7 @@ export function MetroTimeline({
                         className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border-2 shrink-0 transition-colors ${
                           dotFilled
                             ? "bg-brand-500 border-brand-500 scale-110"
-                            : "border-white/40 bg-white/10 group-hover:border-white group-hover:bg-white/20"
+                            : "border-white/70 bg-white/20 group-hover:border-white group-hover:bg-white/30"
                         }`}
                         style={{
                           transitionDelay:
@@ -159,12 +159,12 @@ export function MetroTimeline({
                         }}
                       />
                       {/* City */}
-                      <span className="text-[10px] sm:text-xs text-white/80 text-center leading-tight truncate max-w-full px-1">
+                      <span className="text-[10px] sm:text-xs text-white text-center leading-tight truncate max-w-full px-1">
                         {exhibition.city}
                       </span>
                       {/* Dates */}
                       {(exhibition.dateFrom || exhibition.dateTo) && (
-                        <span className="text-[8px] sm:text-[10px] text-white/40 text-center leading-tight whitespace-nowrap">
+                        <span className="text-[8px] sm:text-[10px] text-white/80 text-center leading-tight whitespace-nowrap">
                           {exhibition.dateFrom && exhibition.dateTo
                             ? `${exhibition.dateFrom} / ${exhibition.dateTo}`
                             : exhibition.dateFrom || exhibition.dateTo}
@@ -175,7 +175,7 @@ export function MetroTimeline({
                     {/* Horizontal connector to next stop */}
                     {!isLastInDisplay && (
                       <div className="flex-1 min-w-4 flex items-start pt-[5px] sm:pt-[6px]">
-                        <div className="w-full h-[2px] relative bg-white/15 rounded-full overflow-hidden">
+                        <div className="w-full h-[2px] relative bg-white/30 rounded-full overflow-hidden">
                           <div
                             className="absolute inset-y-0 bg-brand-500 rounded-full"
                             style={{
@@ -246,7 +246,7 @@ function UTurn({
   return (
     <div className="relative h-6 w-full">
       <div
-        className="absolute top-0 h-full w-[2px] bg-white/15 rounded-full overflow-hidden"
+        className="absolute top-0 h-full w-[2px] bg-white/30 rounded-full overflow-hidden"
         style={{ left: `${centerPercent}%`, transform: "translateX(-50%)" }}
       >
         <div

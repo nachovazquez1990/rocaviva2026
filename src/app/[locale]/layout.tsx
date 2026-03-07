@@ -7,13 +7,13 @@ import { locales, type Locale } from "@/lib/i18n/config";
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   display: "swap",
 });
 
 const bodoni = Bodoni_Moda({
   variable: "--font-bodoni",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   display: "swap",
 });
 

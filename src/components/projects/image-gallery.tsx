@@ -99,7 +99,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
             {/* Close button */}
             <button
               onClick={closeLightbox}
-              className="absolute top-4 right-4 z-10 p-2 text-white/70 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-white"
+              className="absolute top-4 right-4 z-10 p-2 text-white/90 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-white"
               aria-label="Close"
             >
               <X className="w-6 h-6" />
@@ -112,7 +112,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
                   e.stopPropagation();
                   goPrev();
                 }}
-                className="absolute left-4 z-10 p-2 text-white/50 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-white"
+                className="absolute left-4 z-10 p-2 text-white/90 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-white"
                 aria-label="Previous image"
               >
                 <ChevronLeft className="w-8 h-8" />
@@ -146,7 +146,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
                   e.stopPropagation();
                   goNext();
                 }}
-                className="absolute right-4 z-10 p-2 text-white/50 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-white"
+                className="absolute right-4 z-10 p-2 text-white/90 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-white"
                 aria-label="Next image"
               >
                 <ChevronRight className="w-8 h-8" />
@@ -154,7 +154,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
             )}
 
             {/* Counter */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-white/50 tracking-widest font-mono tabular-nums">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-white/80 tracking-widest font-mono tabular-nums">
               {lightboxIndex + 1} / {images.length}
             </div>
           </motion.div>
