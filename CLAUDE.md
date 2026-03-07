@@ -1,5 +1,13 @@
 # Rocaviva Eventos - Web Redesign 2026
 
+## Self-Maintenance Rule
+After EVERY user request, before responding, evaluate:
+1. Does this request introduce a new decision, pattern, convention, or tool? -> Update CLAUDE.md
+2. Does this request add, change, or complete a task? -> Update ROADMAP.md
+3. Does this request change architecture, workflow, or project structure? -> Update both
+4. Does this request reveal a user preference or correction? -> Update CLAUDE.md and/or memory
+If none apply, proceed normally. Keep updates minimal and precise - don't bloat the docs.
+
 ## Project Overview
 Complete redesign of rocaviva.eu - a cultural events company specializing in historical figure exhibitions.
 The goal is a modern, elegant, award-worthy website with exceptional UX/UI, animations, accessibility, and SEO.
