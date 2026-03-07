@@ -38,9 +38,9 @@ export async function generateMetadata({
     description: meta.description,
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://rocaviva.eu"),
     alternates: {
-      canonical: `/${locale}`,
+      canonical: locale === "es" ? "/" : `/${locale}`,
       languages: {
-        es: "/es",
+        es: "/",
         en: "/en",
         fr: "/fr",
       },
@@ -90,6 +90,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={`${inter.variable} ${bodoni.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://feeds.behold.so" />
+        <link rel="dns-prefetch" href="https://feeds.behold.so" />
+      </head>
       <body className="font-sans antialiased bg-neutral-50 text-neutral-900">
         <NextIntlClientProvider messages={messages}>
           {children}

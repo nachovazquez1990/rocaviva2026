@@ -54,8 +54,31 @@ async function runAudit() {
       .sort((a, b) => (a.score || 0) - (b.score || 0))
       .slice(0, 10)
       .forEach((a) => {
-        console.log(`  - ${a.title} (score: ${Math.round((a.score || 0) * 100)})`);
+        const desc = a.description ? ` — ${a.description.slice(0, 120)}` : "";
+        console.log(`  - ${a.title} (score: ${Math.round((a.score || 0) * 100)})${desc}`);
       });
+    console.log("");
+  }
+
+  // Show CLS details
+  const clsAudit = audits["layout-shift-elements"];
+  if (clsAudit?.details?.items?.length) {
+    console.log("  Layout shift elements:");
+    clsAudit.details.items.forEach((item) => {
+      console.log(`  - ${item.node?.snippet || item.node?.selector || "unknown"} (score: ${item.score?.toFixed(4)})`);
+    });
+    console.log("");
+  }
+
+  // Show SEO failures specifically
+  const seoFailures = Object.values(audits).filter(
+    (a) => a.score !== null && a.score < 1 && categories["seo"]?.auditRefs?.some((ref) => ref.id === a.id)
+  );
+  if (seoFailures.length > 0) {
+    console.log("  SEO issues:");
+    seoFailures.forEach((a) => {
+      console.log(`  - ${a.title} (score: ${Math.round((a.score || 0) * 100)})`);
+    });
     console.log("");
   }
 

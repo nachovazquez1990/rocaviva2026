@@ -14,23 +14,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
-  const url = `https://rocaviva.eu/${locale}`;
+  const canonicalPath = locale === "es" ? "/" : `/${locale}`;
 
   return {
     title: t("title"),
     description: t("description"),
     alternates: {
-      canonical: url,
+      canonical: canonicalPath,
       languages: {
-        es: "https://rocaviva.eu/es",
-        en: "https://rocaviva.eu/en",
-        fr: "https://rocaviva.eu/fr",
+        es: "/",
+        en: "/en",
+        fr: "/fr",
       },
     },
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url,
+      url: canonicalPath,
       siteName: "Rocaviva Eventos",
       locale: locale === "es" ? "es_ES" : locale === "fr" ? "fr_FR" : "en_US",
       type: "website",

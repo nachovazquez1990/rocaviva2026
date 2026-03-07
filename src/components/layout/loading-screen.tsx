@@ -23,7 +23,7 @@ export function LoadingScreen() {
       const timer = setTimeout(() => {
         setShow(false);
         sessionStorage.setItem("rocaviva-loaded", "1");
-      }, 2800);
+      }, 1800);
       return () => clearTimeout(timer);
     }
   }, [prefersReducedMotion]);

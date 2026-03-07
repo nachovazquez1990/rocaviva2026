@@ -4,9 +4,6 @@ import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "@/lib/i18n/navigation";
-import type { Easing } from "framer-motion";
-
-const ease: Easing = [0.16, 1, 0.3, 1];
 
 export function HeroSection() {
   const t = useTranslations("home");
@@ -31,57 +28,35 @@ export function HeroSection() {
         style={{ y, scale }}
         className="absolute inset-0"
       >
-        {/* Placeholder gradient — replace with exhibition image */}
         <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 via-neutral-800 to-accent-900" />
-        {/* Overlay gradient for text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
       </motion.div>
 
-      {/* Content */}
+      {/* Content — no layout-shifting animations, only opacity fades */}
       <motion.div
         style={{ opacity }}
         className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center"
       >
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease }}
-          className="text-xs tracking-[0.35em] uppercase text-white/90 mb-6"
-        >
+        <p className="text-xs tracking-[0.35em] uppercase text-white/90 mb-6">
           {t("heroSubtitle")}
-        </motion.p>
+        </p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.1, ease }}
-          className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight text-white"
-        >
+        <h1 className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight text-white">
           ROCAVIVA
-        </motion.h1>
+        </h1>
 
-        <motion.span
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, ease }}
-          className="font-display text-lg sm:text-xl md:text-2xl tracking-[0.3em] uppercase text-white mt-2"
-        >
+        <span className="font-display text-lg sm:text-xl md:text-2xl tracking-[0.3em] uppercase text-white mt-2">
           EVENTOS
-        </motion.span>
+        </span>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9, ease }}
-          className="mt-12"
-        >
+        <div className="mt-12">
           <Link
             href="/projects"
             className="inline-block px-10 py-4 text-xs font-medium tracking-[0.2em] uppercase text-white border border-white/60 hover:bg-white hover:text-neutral-900 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             {t("heroCta")}
           </Link>
-        </motion.div>
+        </div>
       </motion.div>
 
       {/* Scroll indicator */}
