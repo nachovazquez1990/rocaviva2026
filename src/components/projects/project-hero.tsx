@@ -13,7 +13,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export function ProjectHero({ title, imageUrl, gradient }: ProjectHeroProps) {
   return (
-    <section className="relative h-[100svh] sm:h-[60vh] md:h-[65vh] overflow-hidden bg-neutral-950">
+    <section className="relative h-[calc(100vh-8rem)] sm:h-[60vh] md:h-[65vh] overflow-hidden bg-neutral-950">
       {/* Background */}
       {imageUrl ? (
         <Image
