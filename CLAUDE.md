@@ -177,7 +177,7 @@ Key tables:
 
 ## Important Notes
 - The site must be fully responsive (mobile-first approach)
-- Loading screen appears only on initial visit (session-based)
+- Loading screen removed from public layout (kept as component for potential future use)
 - Navigation must be impressive on both desktop and mobile
 - Timeline component for exhibitions uses metro-stop metaphor
 - Book download requires form completion (data stored in Supabase)
