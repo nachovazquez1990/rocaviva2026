@@ -1,0 +1,71 @@
+{
+  "metadata": {
+    "title": "Rocaviva Eventos | Exposiciones Culturales e Historicas",
+    "description": "Empresa lider en organizacion de exposiciones culturales itinerantes sobre personajes historicos. Mujeres Nobel, ciencia, literatura y mas."
+  },
+  "nav": {
+    "home": "Inicio",
+    "projects": "Proyectos",
+    "communication": "Comunicacion",
+    "books": "Libros",
+    "collaborators": "Colaboradores",
+    "contact": "Contacto",
+    "admin": "Administracion"
+  },
+  "home": {
+    "heroSubtitle": "Exposiciones culturales que inspiran",
+    "latestExhibition": "Ultima exposicion",
+    "moreInfo": "Mas informacion",
+    "aboutTitle": "Quienes Somos",
+    "servicesTitle": "Nuestros Servicios",
+    "contactTitle": "Contactanos",
+    "contactCta": "Organiza tu exposicion con nosotros"
+  },
+  "projects": {
+    "title": "Proyectos",
+    "downloadDossier": "Descargar Dossier Completo",
+    "exhibitions": "Itinerancias",
+    "gallery": "Galeria",
+    "from": "desde",
+    "to": "hasta"
+  },
+  "communication": {
+    "title": "Comunicacion",
+    "readArticle": "Leer noticia",
+    "listenProgram": "Escuchar programa",
+    "watchVideo": "Ver programa",
+    "all": "Todos",
+    "press": "Prensa",
+    "radio": "Radio",
+    "tv": "Television",
+    "video": "Video"
+  },
+  "books": {
+    "title": "Libros",
+    "downloadForm": "Rellena el formulario para descargar",
+    "name": "Nombre",
+    "email": "Correo electronico",
+    "interest": "Interes en el libro",
+    "interestPersonal": "Personal",
+    "interestProfessional": "Profesional",
+    "interestGift": "Regalo",
+    "profession": "Profesion / Dedicacion",
+    "comments": "Otros comentarios (opcional)",
+    "download": "Descargar",
+    "downloadPart1": "Descargar Parte 1",
+    "downloadPart2": "Descargar Parte 2",
+    "thankYou": "Gracias por tu interes"
+  },
+  "collaborators": {
+    "title": "Colaboradores"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados",
+    "privacy": "Politica de privacidad",
+    "legal": "Aviso legal",
+    "cookies": "Politica de cookies"
+  },
+  "loading": {
+    "text": "Cargando..."
+  }
+}

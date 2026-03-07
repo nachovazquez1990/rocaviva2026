@@ -1,0 +1,75 @@
+name: Version Tag
+
+# Se ejecuta manualmente o al mergear PR a main
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: "Tipo de version"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: minor
+
+jobs:
+  tag:
+    name: Create Version Tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get current version
+        id: current
+        run: |
+          CURRENT=$(git tag --sort=-v:refname | head -1)
+          if [ -z "$CURRENT" ]; then
+            CURRENT="v0.0.0"
+          fi
+          echo "version=$CURRENT" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT"
+
+      - name: Calculate next version
+        id: next
+        run: |
+          CURRENT="${{ steps.current.outputs.version }}"
+          # Remove 'v' prefix
+          VERSION=${CURRENT#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+          case "${{ inputs.version_type }}" in
+            major)
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+              ;;
+            minor)
+              MINOR=$((MINOR + 1))
+              PATCH=0
+              ;;
+            patch)
+              PATCH=$((PATCH + 1))
+              ;;
+          esac
+
+          NEXT="v${MAJOR}.${MINOR}.${PATCH}"
+          echo "version=$NEXT" >> $GITHUB_OUTPUT
+          echo "Next version: $NEXT"
+
+      - name: Create tag
+        run: |
+          git tag ${{ steps.next.outputs.version }}
+          git push origin ${{ steps.next.outputs.version }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.next.outputs.version }}
+          name: ${{ steps.next.outputs.version }}
+          generate_release_notes: true

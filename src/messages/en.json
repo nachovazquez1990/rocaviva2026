@@ -1,0 +1,71 @@
+{
+  "metadata": {
+    "title": "Rocaviva Eventos | Cultural & Historical Exhibitions",
+    "description": "Leading company in organizing itinerant cultural exhibitions about historical figures. Nobel Women, science, literature and more."
+  },
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "communication": "Press",
+    "books": "Books",
+    "collaborators": "Partners",
+    "contact": "Contact",
+    "admin": "Admin"
+  },
+  "home": {
+    "heroSubtitle": "Cultural exhibitions that inspire",
+    "latestExhibition": "Latest exhibition",
+    "moreInfo": "More information",
+    "aboutTitle": "About Us",
+    "servicesTitle": "Our Services",
+    "contactTitle": "Contact Us",
+    "contactCta": "Organize your exhibition with us"
+  },
+  "projects": {
+    "title": "Projects",
+    "downloadDossier": "Download Full Dossier",
+    "exhibitions": "Exhibitions",
+    "gallery": "Gallery",
+    "from": "from",
+    "to": "to"
+  },
+  "communication": {
+    "title": "Press & Media",
+    "readArticle": "Read article",
+    "listenProgram": "Listen to program",
+    "watchVideo": "Watch video",
+    "all": "All",
+    "press": "Press",
+    "radio": "Radio",
+    "tv": "Television",
+    "video": "Video"
+  },
+  "books": {
+    "title": "Books",
+    "downloadForm": "Fill in the form to download",
+    "name": "Name",
+    "email": "Email",
+    "interest": "Interest in the book",
+    "interestPersonal": "Personal",
+    "interestProfessional": "Professional",
+    "interestGift": "Gift",
+    "profession": "Profession / Occupation",
+    "comments": "Other comments (optional)",
+    "download": "Download",
+    "downloadPart1": "Download Part 1",
+    "downloadPart2": "Download Part 2",
+    "thankYou": "Thank you for your interest"
+  },
+  "collaborators": {
+    "title": "Partners"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "privacy": "Privacy policy",
+    "legal": "Legal notice",
+    "cookies": "Cookie policy"
+  },
+  "loading": {
+    "text": "Loading..."
+  }
+}

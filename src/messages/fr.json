@@ -1,0 +1,71 @@
+{
+  "metadata": {
+    "title": "Rocaviva Eventos | Expositions Culturelles et Historiques",
+    "description": "Entreprise leader dans l'organisation d'expositions culturelles itinerantes sur des personnages historiques. Femmes Nobel, science, litterature et plus."
+  },
+  "nav": {
+    "home": "Accueil",
+    "projects": "Projets",
+    "communication": "Presse",
+    "books": "Livres",
+    "collaborators": "Partenaires",
+    "contact": "Contact",
+    "admin": "Administration"
+  },
+  "home": {
+    "heroSubtitle": "Des expositions culturelles qui inspirent",
+    "latestExhibition": "Derniere exposition",
+    "moreInfo": "Plus d'informations",
+    "aboutTitle": "Qui Sommes-Nous",
+    "servicesTitle": "Nos Services",
+    "contactTitle": "Contactez-nous",
+    "contactCta": "Organisez votre exposition avec nous"
+  },
+  "projects": {
+    "title": "Projets",
+    "downloadDossier": "Telecharger le Dossier Complet",
+    "exhibitions": "Itinerances",
+    "gallery": "Galerie",
+    "from": "du",
+    "to": "au"
+  },
+  "communication": {
+    "title": "Presse et Medias",
+    "readArticle": "Lire l'article",
+    "listenProgram": "Ecouter le programme",
+    "watchVideo": "Voir le programme",
+    "all": "Tous",
+    "press": "Presse",
+    "radio": "Radio",
+    "tv": "Television",
+    "video": "Video"
+  },
+  "books": {
+    "title": "Livres",
+    "downloadForm": "Remplissez le formulaire pour telecharger",
+    "name": "Nom",
+    "email": "E-mail",
+    "interest": "Interet pour le livre",
+    "interestPersonal": "Personnel",
+    "interestProfessional": "Professionnel",
+    "interestGift": "Cadeau",
+    "profession": "Profession / Activite",
+    "comments": "Autres commentaires (optionnel)",
+    "download": "Telecharger",
+    "downloadPart1": "Telecharger Partie 1",
+    "downloadPart2": "Telecharger Partie 2",
+    "thankYou": "Merci pour votre interet"
+  },
+  "collaborators": {
+    "title": "Partenaires"
+  },
+  "footer": {
+    "rights": "Tous droits reserves",
+    "privacy": "Politique de confidentialite",
+    "legal": "Mentions legales",
+    "cookies": "Politique de cookies"
+  },
+  "loading": {
+    "text": "Chargement..."
+  }
+}
