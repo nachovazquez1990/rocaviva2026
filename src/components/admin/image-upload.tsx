@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { Upload, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -77,10 +78,13 @@ export function ImageUpload({ value, onChange, folder = "general", label, classN
 
       {value ? (
         <div className="relative group inline-block">
-          <img
+          <Image
             src={value}
             alt="Preview"
+            width={200}
+            height={128}
             className="h-32 w-auto max-w-full object-contain border border-neutral-200"
+            unoptimized
           />
           <button
             type="button"

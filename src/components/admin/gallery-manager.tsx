@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { Upload, X, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -124,10 +125,12 @@ export function GalleryManager({
               key={img.image_url + idx}
               className="relative group aspect-square bg-neutral-100 overflow-hidden border border-neutral-200"
             >
-              <img
+              <Image
                 src={img.image_url}
                 alt=""
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                unoptimized
               />
 
               {/* Overlay controls */}

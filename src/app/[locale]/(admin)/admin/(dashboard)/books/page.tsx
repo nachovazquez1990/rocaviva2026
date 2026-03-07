@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import type { Book, BookFile } from "@/lib/supabase/types";
 import { AdminModal } from "@/components/admin/admin-modal";
@@ -222,7 +223,7 @@ export default function BooksAdminPage() {
               <tr key={item.id} className="border-b border-neutral-100 hover:bg-neutral-50">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    {item.image_url && <img src={item.image_url} alt="" className="w-10 h-14 object-cover" />}
+                    {item.image_url && <Image src={item.image_url} alt="" width={40} height={56} className="w-10 h-14 object-cover" unoptimized />}
                     <span className="font-medium text-neutral-900">{item.title_es}</span>
                   </div>
                 </td>

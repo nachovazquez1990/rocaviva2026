@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import type { Collaborator } from "@/lib/supabase/types";
 import { AdminModal } from "@/components/admin/admin-modal";
@@ -142,7 +143,7 @@ export default function CollaboratorsAdminPage() {
                 </td>
                 <td className="px-4 py-3 font-medium text-neutral-900">{item.name}</td>
                 <td className="px-4 py-3">
-                  <img src={item.logo_url} alt={item.name} className="h-8 w-auto max-w-[100px] object-contain" />
+                  <Image src={item.logo_url} alt={item.name} width={100} height={32} className="h-8 w-auto max-w-[100px] object-contain" unoptimized />
                 </td>
                 <td className="px-4 py-3 text-neutral-500 text-xs truncate max-w-[200px]">
                   {item.website_url || "—"}

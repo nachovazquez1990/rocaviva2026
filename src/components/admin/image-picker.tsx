@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { ImageUpload } from "./image-upload";
 import { Images, X } from "lucide-react";
@@ -88,11 +89,11 @@ export function ImagePicker({ value, onChange, folder = "news", label }: ImagePi
                     setShowPicker(false);
                   }}
                   className={cn(
-                    "aspect-square overflow-hidden border-2 transition-colors",
+                    "relative aspect-square overflow-hidden border-2 transition-colors",
                     value === url ? "border-brand-600" : "border-transparent hover:border-brand-300"
                   )}
                 >
-                  <img src={url} alt="" className="w-full h-full object-cover" />
+                  <Image src={url} alt="" fill className="object-cover" unoptimized />
                 </button>
               ))}
             </div>
@@ -101,7 +102,7 @@ export function ImagePicker({ value, onChange, folder = "news", label }: ImagePi
           {/* Show current selection */}
           {value && (
             <div className="mt-2 relative group inline-block">
-              <img src={value} alt="Seleccionada" className="h-20 w-auto object-contain border border-neutral-200" />
+              <Image src={value} alt="Seleccionada" width={80} height={80} className="h-20 w-auto object-contain border border-neutral-200" unoptimized />
               <button
                 type="button"
                 onClick={() => onChange("")}
