@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef } from "react";
 import { useTranslations } from "next-intl";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import type { Easing } from "framer-motion";
 import type { HomeContentMap } from "@/lib/supabase/types";
 
@@ -15,45 +14,18 @@ const exhibitions = [
   { db: "about_exhibition_4", t: "aboutExhibition4" },
 ] as const;
 
-function AnimatedBlock({
-  children,
-  delay = 0,
-  className,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.7, delay, ease }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
 export function AboutSection({ content }: { content: HomeContentMap }) {
   const t = useTranslations("home");
   const c = (dbKey: string, tKey: string) => content[dbKey] || t(tKey);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const titleInView = useInView(titleRef, { once: true, margin: "-80px" });
 
   return (
     <section className="py-24 md:py-32 lg:py-40 bg-white" aria-labelledby="about-title">
       <div className="max-w-6xl mx-auto px-6">
         {/* Title with decorative line */}
         <motion.div
-          ref={titleRef}
           initial={{ opacity: 0 }}
-          animate={titleInView ? { opacity: 1 } : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, ease }}
           className="mb-16 md:mb-24"
         >
@@ -65,21 +37,34 @@ export function AboutSection({ content }: { content: HomeContentMap }) {
           </h2>
           <motion.div
             initial={{ scaleX: 0 }}
-            animate={titleInView ? { scaleX: 1 } : { scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1, delay: 0.3, ease }}
             className="h-px bg-brand-600 mt-6 origin-left max-w-[120px]"
           />
         </motion.div>
 
         {/* Intro paragraph — large text */}
-        <AnimatedBlock className="mb-16 md:mb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease }}
+          className="mb-16 md:mb-20"
+        >
           <p className="text-xl sm:text-2xl md:text-3xl leading-relaxed text-neutral-800 font-light max-w-4xl">
             {c("about_intro", "aboutIntro")}
           </p>
-        </AnimatedBlock>
+        </motion.div>
 
         {/* Key exhibitions */}
-        <AnimatedBlock delay={0.1} className="mb-16 md:mb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, delay: 0.1, ease }}
+          className="mb-16 md:mb-20"
+        >
           <div className="grid grid-cols-1 gap-4 max-w-4xl">
             {exhibitions.map(({ db, t: tKey }, i) => (
               <motion.div
@@ -97,42 +82,67 @@ export function AboutSection({ content }: { content: HomeContentMap }) {
               </motion.div>
             ))}
           </div>
-        </AnimatedBlock>
+        </motion.div>
 
         {/* Body paragraphs in two-column on desktop */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 max-w-6xl">
           <div className="space-y-8">
-            <AnimatedBlock>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, ease }}
+            >
               <p className="text-base md:text-lg leading-relaxed text-neutral-600">
                 {c("about_projects", "aboutProjects")}
               </p>
-            </AnimatedBlock>
+            </motion.div>
 
-            <AnimatedBlock delay={0.1}>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, delay: 0.1, ease }}
+            >
               <p className="text-base md:text-lg leading-relaxed text-neutral-600">
                 {c("about_collaborators", "aboutCollaborators")}
               </p>
-            </AnimatedBlock>
+            </motion.div>
 
-            <AnimatedBlock delay={0.2}>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, delay: 0.2, ease }}
+            >
               <p className="text-base md:text-lg leading-relaxed text-neutral-600">
                 {c("about_readings", "aboutReadings")}
               </p>
-            </AnimatedBlock>
+            </motion.div>
           </div>
 
           <div className="space-y-8">
-            <AnimatedBlock>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, ease }}
+            >
               <p className="text-base md:text-lg leading-relaxed text-neutral-600">
                 {c("about_nobel", "aboutNobel")}
               </p>
-            </AnimatedBlock>
+            </motion.div>
 
-            <AnimatedBlock delay={0.1}>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, delay: 0.1, ease }}
+            >
               <p className="text-base md:text-lg leading-relaxed text-neutral-600">
                 {c("about_yo_te_aplaudo", "aboutYoTeAplaudo")}
               </p>
-            </AnimatedBlock>
+            </motion.div>
           </div>
         </div>
       </div>
