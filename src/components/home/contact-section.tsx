@@ -4,11 +4,13 @@ import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { motion, useInView } from "framer-motion";
 import type { Easing } from "framer-motion";
+import type { HomeContentMap } from "@/app/[locale]/(public)/page";
 
 const ease: Easing = [0.16, 1, 0.3, 1];
 
-export function ContactSection() {
+export function ContactSection({ content }: { content: HomeContentMap }) {
   const t = useTranslations("home");
+  const c = (dbKey: string, tKey: string) => content[dbKey] || t(tKey);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -22,7 +24,7 @@ export function ContactSection() {
           transition={{ duration: 0.8, ease }}
           className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-6"
         >
-          {t("contactTitle")}
+          {c("contact_title", "contactTitle")}
         </motion.h2>
 
         <motion.p
@@ -31,7 +33,7 @@ export function ContactSection() {
           transition={{ duration: 0.8, delay: 0.15, ease }}
           className="text-lg md:text-xl text-neutral-300 mb-12 max-w-2xl mx-auto"
         >
-          {t("contactCta")}
+          {c("contact_cta", "contactCta")}
         </motion.p>
 
         {/* Contact details */}
@@ -76,7 +78,7 @@ export function ContactSection() {
             href="mailto:eventos@rocaviva.eu"
             className="inline-block px-10 py-4 text-xs font-medium tracking-[0.2em] uppercase bg-brand-600 text-white hover:bg-brand-700 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
           >
-            {t("contactButton")}
+            {c("contact_button", "contactButton")}
           </a>
         </motion.div>
       </div>

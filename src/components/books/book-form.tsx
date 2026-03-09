@@ -53,32 +53,34 @@ export function BookForm({ bookId, files }: BookFormProps) {
         </motion.div>
 
         {/* Download buttons - one per file part */}
-        <motion.div
-          variants={staggerContainer}
-          className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center"
-        >
-          {files.map((file, idx) => (
-            <motion.div key={file.part_number} variants={staggerItem}>
-              <a
-                href={file.file_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                download
-              >
-                <Button
-                  variant={idx === 0 ? "primary" : "outline"}
-                  size="lg"
-                  className="w-full sm:w-auto"
+        {files.length > 0 && (
+          <motion.div
+            variants={staggerContainer}
+            className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center"
+          >
+            {files.map((file, idx) => (
+              <motion.div key={file.part_number} variants={staggerItem}>
+                <a
+                  href={file.file_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
                 >
-                  <Download className="w-4 h-4 mr-2" />
-                  {file.label || (files.length === 1
-                    ? t("download")
-                    : `${t("download")} - ${t("part")} ${file.part_number}`)}
-                </Button>
-              </a>
-            </motion.div>
-          ))}
-        </motion.div>
+                  <Button
+                    variant={idx === 0 ? "primary" : "outline"}
+                    size="lg"
+                    className="w-full sm:w-auto"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    {file.label || (files.length === 1
+                      ? t("download")
+                      : `${t("download")} - ${t("part")} ${file.part_number}`)}
+                  </Button>
+                </a>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </motion.div>
     );
   }

@@ -4,20 +4,22 @@ import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { motion, useInView } from "framer-motion";
 import type { Easing } from "framer-motion";
+import type { HomeContentMap } from "@/app/[locale]/(public)/page";
 
 const ease: Easing = [0.16, 1, 0.3, 1];
 
 const services = [
-  { key: "exhibitions", icon: GalleryIcon },
-  { key: "guidedTours", icon: MapIcon },
-  { key: "conferences", icon: MicIcon },
-  { key: "readings", icon: BookOpenIcon },
-  { key: "workshops", icon: PaletteIcon },
-  { key: "commemorations", icon: TreeIcon },
+  { dbKey: "service_exhibitions", tKey: "Exhibitions", icon: GalleryIcon },
+  { dbKey: "service_guided_tours", tKey: "GuidedTours", icon: MapIcon },
+  { dbKey: "service_conferences", tKey: "Conferences", icon: MicIcon },
+  { dbKey: "service_readings", tKey: "Readings", icon: BookOpenIcon },
+  { dbKey: "service_workshops", tKey: "Workshops", icon: PaletteIcon },
+  { dbKey: "service_commemorations", tKey: "Commemorations", icon: TreeIcon },
 ] as const;
 
-export function ServicesSection() {
+export function ServicesSection({ content }: { content: HomeContentMap }) {
   const t = useTranslations("home");
+  const c = (dbKey: string, tKey: string) => content[dbKey] || t(tKey);
   const titleRef = useRef<HTMLDivElement>(null);
   const titleInView = useInView(titleRef, { once: true, margin: "-80px" });
 
@@ -36,7 +38,7 @@ export function ServicesSection() {
             id="services-title"
             className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-neutral-900"
           >
-            {t("servicesTitle")}
+            {c("services_title", "servicesTitle")}
           </h2>
           <motion.div
             initial={{ scaleX: 0 }}
@@ -48,9 +50,9 @@ export function ServicesSection() {
 
         {/* Services grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-          {services.map(({ key, icon: Icon }, i) => (
+          {services.map(({ dbKey, tKey, icon: Icon }, i) => (
             <motion.div
-              key={key}
+              key={dbKey}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
@@ -61,10 +63,10 @@ export function ServicesSection() {
                 <Icon />
               </div>
               <h3 className="font-display text-xl md:text-2xl font-bold text-neutral-900 mb-3">
-                {t(`service${capitalize(key)}`)}
+                {c(dbKey, `service${tKey}`)}
               </h3>
               <p className="text-sm md:text-base leading-relaxed text-neutral-500">
-                {t(`service${capitalize(key)}Desc`)}
+                {c(`${dbKey}_desc`, `service${tKey}Desc`)}
               </p>
             </motion.div>
           ))}
@@ -72,10 +74,6 @@ export function ServicesSection() {
       </div>
     </section>
   );
-}
-
-function capitalize(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 /* Icons — minimal stroke style matching the design system */

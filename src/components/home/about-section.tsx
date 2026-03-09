@@ -4,14 +4,15 @@ import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { motion, useInView } from "framer-motion";
 import type { Easing } from "framer-motion";
+import type { HomeContentMap } from "@/app/[locale]/(public)/page";
 
 const ease: Easing = [0.16, 1, 0.3, 1];
 
 const exhibitions = [
-  "aboutExhibition1",
-  "aboutExhibition2",
-  "aboutExhibition3",
-  "aboutExhibition4",
+  { db: "about_exhibition_1", t: "aboutExhibition1" },
+  { db: "about_exhibition_2", t: "aboutExhibition2" },
+  { db: "about_exhibition_3", t: "aboutExhibition3" },
+  { db: "about_exhibition_4", t: "aboutExhibition4" },
 ] as const;
 
 function AnimatedBlock({
@@ -39,8 +40,9 @@ function AnimatedBlock({
   );
 }
 
-export function AboutSection() {
+export function AboutSection({ content }: { content: HomeContentMap }) {
   const t = useTranslations("home");
+  const c = (dbKey: string, tKey: string) => content[dbKey] || t(tKey);
   const titleRef = useRef<HTMLDivElement>(null);
   const titleInView = useInView(titleRef, { once: true, margin: "-80px" });
 
@@ -59,7 +61,7 @@ export function AboutSection() {
             id="about-title"
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900"
           >
-            {t("aboutTitle")}
+            {c("about_title", "aboutTitle")}
           </h2>
           <motion.div
             initial={{ scaleX: 0 }}
@@ -72,16 +74,16 @@ export function AboutSection() {
         {/* Intro paragraph — large text */}
         <AnimatedBlock className="mb-16 md:mb-20">
           <p className="text-xl sm:text-2xl md:text-3xl leading-relaxed text-neutral-800 font-light max-w-4xl">
-            {t("aboutIntro")}
+            {c("about_intro", "aboutIntro")}
           </p>
         </AnimatedBlock>
 
         {/* Key exhibitions */}
         <AnimatedBlock delay={0.1} className="mb-16 md:mb-20">
           <div className="grid grid-cols-1 gap-4 max-w-4xl">
-            {exhibitions.map((key, i) => (
+            {exhibitions.map(({ db, t: tKey }, i) => (
               <motion.div
-                key={key}
+                key={db}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
@@ -90,7 +92,7 @@ export function AboutSection() {
               >
                 <span className="mt-1.5 w-2 h-2 bg-brand-600 shrink-0" />
                 <span className="font-display text-lg md:text-xl italic text-neutral-800">
-                  {t(key)}
+                  {c(db, tKey)}
                 </span>
               </motion.div>
             ))}
@@ -102,19 +104,19 @@ export function AboutSection() {
           <div className="space-y-8">
             <AnimatedBlock>
               <p className="text-base md:text-lg leading-relaxed text-neutral-600">
-                {t("aboutProjects")}
+                {c("about_projects", "aboutProjects")}
               </p>
             </AnimatedBlock>
 
             <AnimatedBlock delay={0.1}>
               <p className="text-base md:text-lg leading-relaxed text-neutral-600">
-                {t("aboutCollaborators")}
+                {c("about_collaborators", "aboutCollaborators")}
               </p>
             </AnimatedBlock>
 
             <AnimatedBlock delay={0.2}>
               <p className="text-base md:text-lg leading-relaxed text-neutral-600">
-                {t("aboutReadings")}
+                {c("about_readings", "aboutReadings")}
               </p>
             </AnimatedBlock>
           </div>
@@ -122,13 +124,13 @@ export function AboutSection() {
           <div className="space-y-8">
             <AnimatedBlock>
               <p className="text-base md:text-lg leading-relaxed text-neutral-600">
-                {t("aboutNobel")}
+                {c("about_nobel", "aboutNobel")}
               </p>
             </AnimatedBlock>
 
             <AnimatedBlock delay={0.1}>
               <p className="text-base md:text-lg leading-relaxed text-neutral-600">
-                {t("aboutYoTeAplaudo")}
+                {c("about_yo_te_aplaudo", "aboutYoTeAplaudo")}
               </p>
             </AnimatedBlock>
           </div>

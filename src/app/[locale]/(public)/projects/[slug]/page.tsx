@@ -325,10 +325,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   // Dossier URL — fallback chain: current locale → en → es
   const dossierUrl = project
-    ? (project[`dossier_url_${locale}` as keyof typeof project] as string) ||
-      (project.dossier_url_en as string) ||
-      (project.dossier_url_es as string) ||
-      null
+    ? getLocalizedField(project, "dossier_url", locale) || null
     : mockProject?.dossierUrl ?? null;
 
   // Exhibitions

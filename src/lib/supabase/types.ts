@@ -87,6 +87,9 @@ export interface Book {
   description_fr: string | null;
   image_url: string | null;
   extra_image_url: string | null;
+  stamp_message_es: string | null;
+  stamp_message_en: string | null;
+  stamp_message_fr: string | null;
   download_url_part1: string | null;
   download_url_part2: string | null;
   is_published: boolean;
@@ -161,7 +164,7 @@ export interface AnalyticsEvent {
 // Helper type to get localized field
 export type LocalizedField<T> = T extends { [K in `${string}_es`]: infer V } ? V : never;
 
-// Utility to get the right locale field
+// Utility to get the right locale field with fallback chain: locale → en → es
 export function getLocalizedField(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any,
@@ -169,6 +172,18 @@ export function getLocalizedField(
   locale: string
 ): string {
   const key = `${field}_${locale}`;
-  const fallbackKey = `${field}_es`;
-  return (item[key] as string) || (item[fallbackKey] as string) || (item[field] as string) || "";
+  const value = item[key] as string;
+  if (value) return value;
+
+  if (locale !== "en") {
+    const enValue = item[`${field}_en`] as string;
+    if (enValue) return enValue;
+  }
+
+  if (locale !== "es") {
+    const esValue = item[`${field}_es`] as string;
+    if (esValue) return esValue;
+  }
+
+  return (item[field] as string) || "";
 }

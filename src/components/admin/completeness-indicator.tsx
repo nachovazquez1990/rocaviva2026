@@ -161,7 +161,7 @@ export function getBookMissing(book: {
   if (!book.description_es) missing.push({ label: "Descripcion en espanol" });
   if (!book.description_en) missing.push({ label: "Descripcion en ingles" });
   if (!book.description_fr) missing.push({ label: "Descripcion en frances" });
-  if (!book.image_url) missing.push({ label: "Imagen portada" });
+  if (!book.image_url) missing.push({ label: "Imagen banner" });
   if (book.file_count !== undefined && book.file_count === 0)
     missing.push({ label: "Archivos del libro" });
   return missing;
