@@ -27,7 +27,7 @@ export function LogoGrid({ collaborators, visitWebsiteLabel }: LogoGridProps) {
       variants={staggerContainer}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4"
+      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5"
     >
       {collaborators.map((collab) => {
         const content = (
@@ -35,9 +35,9 @@ export function LogoGrid({ collaborators, visitWebsiteLabel }: LogoGridProps) {
             <Image
               src={collab.logo_url}
               alt={collab.name}
-              width={200}
-              height={120}
-              className="max-h-16 sm:max-h-20 w-auto object-contain grayscale opacity-70 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100"
+              width={240}
+              height={140}
+              className="max-h-20 sm:max-h-28 w-auto object-contain opacity-100 transition-all duration-300 group-hover:grayscale group-hover:opacity-60"
             />
             <span className="absolute inset-x-0 bottom-0 bg-neutral-900/90 text-white text-xs text-center py-1.5 px-2 opacity-0 translate-y-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 truncate">
               {collab.name}
