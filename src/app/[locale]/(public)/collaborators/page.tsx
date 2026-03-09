@@ -185,7 +185,7 @@ export default async function CollaboratorsPage({ params }: Props) {
         </div>
 
         {/* Logo grid */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-20">
+        <div className="max-w-[90rem] mx-auto px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-20">
           <LogoGrid
             collaborators={collaborators}
             visitWebsiteLabel={t("visitWebsite")}

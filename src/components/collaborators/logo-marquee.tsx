@@ -61,13 +61,13 @@ export function LogoMarquee({ collaborators, visitWebsiteLabel }: LogoMarqueePro
       >
         {items.map((collab, i) => {
           const content = (
-            <div className="group flex-shrink-0 flex items-center justify-center h-16 sm:h-20 w-32 sm:w-40 transition-all duration-300">
+            <div className="group flex-shrink-0 flex items-center justify-center h-20 sm:h-24 w-40 sm:w-48 transition-all duration-300">
               <Image
                 src={collab.logo_url}
                 alt={collab.name}
-                width={160}
-                height={80}
-                className="max-h-12 sm:max-h-16 w-auto object-contain grayscale opacity-60 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100"
+                width={192}
+                height={96}
+                className="max-h-16 sm:max-h-20 w-auto object-contain opacity-100 transition-all duration-300 group-hover:grayscale group-hover:opacity-60"
               />
             </div>
           );
