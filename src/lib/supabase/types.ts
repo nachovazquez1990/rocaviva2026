@@ -32,14 +32,17 @@ export interface Exhibition {
   id: string;
   project_id: string;
   slug: string;
-  city: string;
-  venue: string | null;
+  city_es: string;
+  city_en: string | null;
+  city_fr: string | null;
+  venue_es: string | null;
+  venue_en: string | null;
+  venue_fr: string | null;
   date_from: string | null;
   date_to: string | null;
   description_es: string | null;
   description_en: string | null;
   description_fr: string | null;
-  image_url: string | null;
   display_order: number;
   is_published: boolean;
   created_at: string;
@@ -167,5 +170,5 @@ export function getLocalizedField(
 ): string {
   const key = `${field}_${locale}`;
   const fallbackKey = `${field}_es`;
-  return (item[key] as string) || (item[fallbackKey] as string) || "";
+  return (item[key] as string) || (item[fallbackKey] as string) || (item[field] as string) || "";
 }

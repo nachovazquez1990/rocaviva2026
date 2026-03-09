@@ -26,23 +26,12 @@ export function AdminModal({ open, onClose, title, children, wide }: AdminModalP
     };
   }, [open]);
 
-  useEffect(() => {
-    function handleEsc(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    if (open) window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [open, onClose]);
-
   if (!open) return null;
 
   return (
     <div
       ref={overlayRef}
       className="fixed inset-0 z-50 flex items-start justify-center pt-[5vh] px-4 bg-black/40"
-      onClick={(e) => {
-        if (e.target === overlayRef.current) onClose();
-      }}
     >
       <div
         className={cn(

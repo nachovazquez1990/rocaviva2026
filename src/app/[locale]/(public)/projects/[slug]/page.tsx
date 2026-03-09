@@ -4,6 +4,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getLocalizedField } from "@/lib/supabase/types";
 import type { Project, Exhibition, ProjectImage } from "@/lib/supabase/types";
+import { formatDate } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ProjectHero } from "@/components/projects/project-hero";
 import { ProjectContent } from "@/components/projects/project-content";
@@ -41,7 +42,7 @@ async function getExhibitions(projectId: string): Promise<Exhibition[]> {
       .select("*")
       .eq("project_id", projectId)
       .eq("is_published", true)
-      .order("display_order", { ascending: true });
+      .order("date_from", { ascending: true });
 
     if (error) return [];
     return data ?? [];
@@ -322,9 +323,12 @@ export default async function ProjectDetailPage({ params }: Props) {
     ? mockProject?.gradient ?? "from-neutral-800 via-neutral-900 to-accent-900"
     : null;
 
-  // Dossier URL
+  // Dossier URL — fallback chain: current locale → en → es
   const dossierUrl = project
-    ? getLocalizedField(project, "dossier_url", locale) || null
+    ? (project[`dossier_url_${locale}` as keyof typeof project] as string) ||
+      (project.dossier_url_en as string) ||
+      (project.dossier_url_es as string) ||
+      null
     : mockProject?.dossierUrl ?? null;
 
   // Exhibitions
@@ -333,10 +337,10 @@ export default async function ProjectDetailPage({ params }: Props) {
     dbExhibitions.length > 0
       ? dbExhibitions.map((e) => ({
           slug: e.slug,
-          city: e.city,
-          venue: e.venue,
-          dateFrom: e.date_from,
-          dateTo: e.date_to,
+          city: getLocalizedField(e, "city", locale),
+          venue: getLocalizedField(e, "venue", locale) || null,
+          dateFrom: e.date_from ? formatDate(e.date_from, locale) : null,
+          dateTo: e.date_to ? formatDate(e.date_to, locale) : null,
         }))
       : mockProject?.exhibitions ?? [];
 
@@ -356,7 +360,33 @@ export default async function ProjectDetailPage({ params }: Props) {
     { label: title },
   ];
 
-  // JSON-LD
+  // JSON-LD (uses raw DB dates for structured data)
+  const jsonLdSubEvents = dbExhibitions.length > 0
+    ? dbExhibitions.map((e) => {
+        const eCity = getLocalizedField(e, "city", locale);
+        const eVenue = getLocalizedField(e, "venue", locale) || null;
+        return {
+          "@type": "ExhibitionEvent" as const,
+          name: `${title} - ${eCity}`,
+          location: {
+            "@type": "Place" as const,
+            name: eVenue ?? eCity,
+            address: { "@type": "PostalAddress" as const, addressLocality: eCity },
+          },
+          ...(e.date_from ? { startDate: e.date_from } : {}),
+          ...(e.date_to ? { endDate: e.date_to } : {}),
+        };
+      })
+    : exhibitions.map((e) => ({
+        "@type": "ExhibitionEvent" as const,
+        name: `${title} - ${e.city}`,
+        location: {
+          "@type": "Place" as const,
+          name: e.venue ?? e.city,
+          address: { "@type": "PostalAddress" as const, addressLocality: e.city },
+        },
+      }));
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ExhibitionEvent",
@@ -369,21 +399,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       url: "https://rocaviva.eu",
     },
     ...(imageUrl ? { image: imageUrl } : {}),
-    ...(exhibitions.length > 0
-      ? {
-          subEvent: exhibitions.map((e) => ({
-            "@type": "ExhibitionEvent",
-            name: `${title} - ${e.city}`,
-            location: {
-              "@type": "Place",
-              name: e.venue ?? e.city,
-              address: { "@type": "PostalAddress", addressLocality: e.city },
-            },
-            ...(e.dateFrom ? { startDate: e.dateFrom } : {}),
-            ...(e.dateTo ? { endDate: e.dateTo } : {}),
-          })),
-        }
-      : {}),
+    ...(jsonLdSubEvents.length > 0 ? { subEvent: jsonLdSubEvents } : {}),
   };
 
   return (

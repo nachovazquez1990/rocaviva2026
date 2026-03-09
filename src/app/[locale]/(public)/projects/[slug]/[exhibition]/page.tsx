@@ -4,9 +4,11 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getLocalizedField } from "@/lib/supabase/types";
 import type { Exhibition, ExhibitionImage, Project } from "@/lib/supabase/types";
+import { formatDate } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ProjectHero } from "@/components/projects/project-hero";
 import { ExhibitionContent } from "@/components/projects/exhibition-content";
+import { ProjectTimeline } from "@/components/projects/project-timeline";
 
 export const revalidate = 3600;
 
@@ -51,6 +53,23 @@ async function getExhibition(
     return data;
   } catch {
     return null;
+  }
+}
+
+async function getAllExhibitions(projectId: string): Promise<Exhibition[]> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("exhibitions")
+      .select("*")
+      .eq("project_id", projectId)
+      .eq("is_published", true)
+      .order("date_from", { ascending: true });
+
+    if (error) return [];
+    return data ?? [];
+  } catch {
+    return [];
   }
 }
 
@@ -208,8 +227,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? getLocalizedField(project, "title", locale)
     : mock?.project.title[locale] ?? mock?.project.title.es ?? slug;
 
-  const city = dbExhibition?.city ?? mock?.exhibition.city ?? exhibitionSlug;
-  const venue = dbExhibition?.venue ?? mock?.exhibition.venue ?? "";
+  const city = dbExhibition ? getLocalizedField(dbExhibition, "city", locale) : mock?.exhibition.city ?? exhibitionSlug;
+  const venue = dbExhibition ? (getLocalizedField(dbExhibition, "venue", locale) || null) : mock?.exhibition.venue ?? "";
 
   const title = `${city}${venue ? ` - ${venue}` : ""}`;
 
@@ -239,8 +258,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "Rocaviva Eventos",
       locale: locale === "es" ? "es_ES" : locale === "fr" ? "fr_FR" : "en_US",
       type: "website",
-      ...(dbExhibition?.image_url
-        ? { images: [{ url: dbExhibition.image_url }] }
+      ...(project?.image_url
+        ? { images: [{ url: project.image_url }] }
         : {}),
     },
     twitter: {
@@ -276,10 +295,12 @@ export default async function ExhibitionDetailPage({ params }: Props) {
     ? getLocalizedField(project, "title", locale)
     : mock!.project.title[locale] ?? mock!.project.title.es;
 
-  const city = dbExhibition?.city ?? mock!.exhibition.city;
-  const venue = dbExhibition?.venue ?? mock!.exhibition.venue;
-  const dateFrom = dbExhibition?.date_from ?? mock!.exhibition.dateFrom;
-  const dateTo = dbExhibition?.date_to ?? mock!.exhibition.dateTo;
+  const city = dbExhibition ? getLocalizedField(dbExhibition, "city", locale) : mock!.exhibition.city;
+  const venue = dbExhibition ? (getLocalizedField(dbExhibition, "venue", locale) || null) : mock!.exhibition.venue;
+  const rawDateFrom = dbExhibition?.date_from ?? mock!.exhibition.dateFrom;
+  const rawDateTo = dbExhibition?.date_to ?? mock!.exhibition.dateTo;
+  const dateFrom = rawDateFrom ? formatDate(rawDateFrom, locale) : null;
+  const dateTo = rawDateTo ? formatDate(rawDateTo, locale) : null;
 
   const description = dbExhibition
     ? getLocalizedField(dbExhibition, "description", locale)
@@ -287,7 +308,7 @@ export default async function ExhibitionDetailPage({ params }: Props) {
       mock!.exhibition.description.es ??
       "";
 
-  const imageUrl = dbExhibition?.image_url ?? null;
+  const imageUrl = project?.image_url ?? null;
   const gradient = !imageUrl
     ? mock?.exhibition.gradient ??
       "from-neutral-800 via-neutral-900 to-accent-900"
@@ -305,8 +326,32 @@ export default async function ExhibitionDetailPage({ params }: Props) {
         }))
       : mock?.exhibition.images ?? [];
 
-  // Hero title: City name
-  const heroTitle = city;
+  // All exhibitions for the timeline
+  const dbAllExhibitions = project ? await getAllExhibitions(project.id) : [];
+  const allExhibitions =
+    dbAllExhibitions.length > 0
+      ? dbAllExhibitions
+          .filter((e) => e.slug !== exhibitionSlug)
+          .map((e) => ({
+            slug: e.slug,
+            city: getLocalizedField(e, "city", locale),
+            venue: getLocalizedField(e, "venue", locale) || null,
+            dateFrom: e.date_from ? formatDate(e.date_from, locale) : null,
+            dateTo: e.date_to ? formatDate(e.date_to, locale) : null,
+          }))
+      : (mock?.project.exhibitions ?? [])
+          .filter((e) => e.slug !== exhibitionSlug)
+          .map((e) => ({
+            slug: e.slug,
+            city: e.city,
+            venue: e.venue,
+            dateFrom: e.dateFrom,
+            dateTo: e.dateTo,
+          }));
+
+  // Hero title: "Project en/in/à City"
+  const preposition = locale === "en" ? "in" : locale === "fr" ? "à" : "en";
+  const heroTitle = `${projectTitle} ${preposition} ${city}`;
 
   // Breadcrumbs
   const breadcrumbItems = [
@@ -323,8 +368,8 @@ export default async function ExhibitionDetailPage({ params }: Props) {
     description: description.slice(0, 300) || `${projectTitle} - ${city}`,
     url: `https://rocaviva.eu/${locale}/projects/${slug}/${exhibitionSlug}`,
     ...(imageUrl ? { image: imageUrl } : {}),
-    ...(dateFrom ? { startDate: dateFrom } : {}),
-    ...(dateTo ? { endDate: dateTo } : {}),
+    ...(rawDateFrom ? { startDate: rawDateFrom } : {}),
+    ...(rawDateTo ? { endDate: rawDateTo } : {}),
     location: {
       "@type": "Place",
       name: venue ?? city,
@@ -379,6 +424,22 @@ export default async function ExhibitionDetailPage({ params }: Props) {
             venueLabel={t("venue")}
             datesLabel={t("dates")}
           />
+
+          {/* Other exhibitions */}
+          {allExhibitions.length > 0 && (
+            <section className="mt-16 sm:mt-20" aria-labelledby="other-exhibitions-heading">
+              <h2
+                id="other-exhibitions-heading"
+                className="font-display text-2xl sm:text-3xl font-semibold text-neutral-900 mb-8"
+              >
+                {t("otherExhibitions")}
+              </h2>
+              <ProjectTimeline
+                projectSlug={slug}
+                exhibitions={allExhibitions}
+              />
+            </section>
+          )}
         </div>
       </main>
     </>

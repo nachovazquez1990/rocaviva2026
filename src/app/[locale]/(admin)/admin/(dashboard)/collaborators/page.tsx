@@ -7,6 +7,7 @@ import type { Collaborator } from "@/lib/supabase/types";
 import { AdminModal } from "@/components/admin/admin-modal";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { Plus, Pencil, Trash2, Eye, EyeOff, ArrowUp, ArrowDown } from "lucide-react";
+import { CompletenessIndicator, getCollaboratorMissing } from "@/components/admin/completeness-indicator";
 
 interface CollabForm {
   name: string;
@@ -124,6 +125,7 @@ export default function CollaboratorsAdminPage() {
               <th className="text-left px-4 py-3 font-medium text-neutral-600">Nombre</th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600">Logo</th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600">Web</th>
+              <th className="text-left px-4 py-3 font-medium text-neutral-600 w-20">Info</th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600 w-20">Estado</th>
               <th className="text-right px-4 py-3 font-medium text-neutral-600 w-28">Acciones</th>
             </tr>
@@ -149,6 +151,9 @@ export default function CollaboratorsAdminPage() {
                   {item.website_url || "—"}
                 </td>
                 <td className="px-4 py-3">
+                  <CompletenessIndicator missing={getCollaboratorMissing(item)} />
+                </td>
+                <td className="px-4 py-3">
                   <button onClick={() => togglePublished(item.id, item.is_published)}>
                     {item.is_published ? <Eye size={16} className="text-green-600" /> : <EyeOff size={16} className="text-neutral-400" />}
                   </button>
@@ -162,7 +167,7 @@ export default function CollaboratorsAdminPage() {
               </tr>
             ))}
             {items.length === 0 && (
-              <tr><td colSpan={6} className="px-4 py-8 text-center text-neutral-400">No hay colaboradores.</td></tr>
+              <tr><td colSpan={7} className="px-4 py-8 text-center text-neutral-400">No hay colaboradores.</td></tr>
             )}
           </tbody>
         </table>

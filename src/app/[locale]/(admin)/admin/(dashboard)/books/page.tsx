@@ -10,6 +10,7 @@ import { LocalizedRichText } from "@/components/admin/localized-rich-text";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { FileUpload } from "@/components/admin/file-upload";
 import { Plus, Pencil, Trash2, Eye, EyeOff, X } from "lucide-react";
+import { CompletenessIndicator, getBookMissing } from "@/components/admin/completeness-indicator";
 
 interface BookForm {
   title_es: string;
@@ -214,6 +215,7 @@ export default function BooksAdminPage() {
             <tr className="bg-neutral-50 border-b border-neutral-200">
               <th className="text-left px-4 py-3 font-medium text-neutral-600">Titulo</th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600">Archivos</th>
+              <th className="text-left px-4 py-3 font-medium text-neutral-600 w-20">Info</th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600 w-20">Estado</th>
               <th className="text-right px-4 py-3 font-medium text-neutral-600 w-28">Acciones</th>
             </tr>
@@ -231,6 +233,9 @@ export default function BooksAdminPage() {
                   {item.file_count ? `${item.file_count} parte${item.file_count > 1 ? "s" : ""}` : "Sin archivos"}
                 </td>
                 <td className="px-4 py-3">
+                  <CompletenessIndicator missing={getBookMissing(item)} />
+                </td>
+                <td className="px-4 py-3">
                   <button onClick={() => togglePublished(item.id, item.is_published)}>
                     {item.is_published ? <Eye size={16} className="text-green-600" /> : <EyeOff size={16} className="text-neutral-400" />}
                   </button>
@@ -244,7 +249,7 @@ export default function BooksAdminPage() {
               </tr>
             ))}
             {items.length === 0 && (
-              <tr><td colSpan={4} className="px-4 py-8 text-center text-neutral-400">No hay libros.</td></tr>
+              <tr><td colSpan={5} className="px-4 py-8 text-center text-neutral-400">No hay libros.</td></tr>
             )}
           </tbody>
         </table>

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getLocalizedField } from "@/lib/supabase/types";
-import type { Project } from "@/lib/supabase/types";
+import type { Project, Exhibition } from "@/lib/supabase/types";
+import { formatDate } from "@/lib/utils";
 import {
   ProjectCarousel,
   type CarouselProject,
@@ -66,6 +67,28 @@ async function getProjects(): Promise<Project[]> {
     return data ?? [];
   } catch {
     return [];
+  }
+}
+
+async function getExhibitionsByProject(): Promise<Record<string, Exhibition[]>> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("exhibitions")
+      .select("*")
+      .eq("is_published", true)
+      .order("date_from", { ascending: true });
+
+    if (error || !data) return {};
+
+    const map: Record<string, Exhibition[]> = {};
+    for (const e of data) {
+      if (!map[e.project_id]) map[e.project_id] = [];
+      map[e.project_id].push(e);
+    }
+    return map;
+  } catch {
+    return {};
   }
 }
 
@@ -151,7 +174,10 @@ export default async function ProjectsPage({ params }: Props) {
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "projects" });
-  const projects = await getProjects();
+  const [projects, exhibitionsByProject] = await Promise.all([
+    getProjects(),
+    getExhibitionsByProject(),
+  ]);
 
   const useMock = projects.length === 0;
 
@@ -168,7 +194,12 @@ export default async function ProjectsPage({ params }: Props) {
         title: getLocalizedField(p, "title", locale),
         image_url: p.image_url,
         gradient: null,
-        exhibitions: [], // TODO: fetch from exhibitions table
+        exhibitions: (exhibitionsByProject[p.id] ?? []).map((e) => ({
+          slug: e.slug,
+          city: getLocalizedField(e, "city", locale),
+          dateFrom: e.date_from ? formatDate(e.date_from, locale) : null,
+          dateTo: e.date_to ? formatDate(e.date_to, locale) : null,
+        })),
       }));
 
   const jsonLd = {

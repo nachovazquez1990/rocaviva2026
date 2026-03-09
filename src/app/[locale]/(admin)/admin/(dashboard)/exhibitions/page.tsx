@@ -2,24 +2,29 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { formatDate } from "@/lib/utils";
 import type { Exhibition, Project, ExhibitionImage } from "@/lib/supabase/types";
 import { AdminModal } from "@/components/admin/admin-modal";
+import { LocalizedInputs } from "@/components/admin/localized-inputs";
 import { LocalizedRichText } from "@/components/admin/localized-rich-text";
-import { ImageUpload } from "@/components/admin/image-upload";
 import { GalleryManager } from "@/components/admin/gallery-manager";
 import { Plus, Pencil, Trash2, Eye, EyeOff, Filter } from "lucide-react";
+import { CompletenessIndicator, getExhibitionMissing } from "@/components/admin/completeness-indicator";
 
 interface ExhibitionForm {
   project_id: string;
   slug: string;
-  city: string;
-  venue: string;
+  city_es: string;
+  city_en: string;
+  city_fr: string;
+  venue_es: string;
+  venue_en: string;
+  venue_fr: string;
   date_from: string;
   date_to: string;
   description_es: string;
   description_en: string;
   description_fr: string;
-  image_url: string;
   is_published: boolean;
 }
 
@@ -35,20 +40,23 @@ interface GalleryImage {
 const emptyForm: ExhibitionForm = {
   project_id: "",
   slug: "",
-  city: "",
-  venue: "",
+  city_es: "",
+  city_en: "",
+  city_fr: "",
+  venue_es: "",
+  venue_en: "",
+  venue_fr: "",
   date_from: "",
   date_to: "",
   description_es: "",
   description_en: "",
   description_fr: "",
-  image_url: "",
   is_published: true,
 };
 
 export default function ExhibitionsAdminPage() {
   const supabase = createClient();
-  const [items, setItems] = useState<(Exhibition & { project_title?: string })[]>([]);
+  const [items, setItems] = useState<(Exhibition & { project_title?: string; city?: string; image_count?: number })[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterProject, setFilterProject] = useState<string>("");
@@ -60,16 +68,23 @@ export default function ExhibitionsAdminPage() {
   const [slugError, setSlugError] = useState("");
 
   const fetchData = useCallback(async () => {
-    const [{ data: exh }, { data: proj }] = await Promise.all([
+    const [{ data: exh }, { data: proj }, { data: imgData }] = await Promise.all([
       supabase.from("exhibitions").select("*").order("display_order", { ascending: true }),
       supabase.from("projects").select("*").order("display_order", { ascending: true }),
+      supabase.from("exhibition_images").select("exhibition_id"),
     ]);
     setProjects((proj as Project[]) || []);
     const projectMap = new Map((proj || []).map((p) => [p.id, p.title_es]));
+    const imgCounts = new Map<string, number>();
+    (imgData || []).forEach((img: { exhibition_id: string }) => {
+      imgCounts.set(img.exhibition_id, (imgCounts.get(img.exhibition_id) || 0) + 1);
+    });
     setItems(
       ((exh as Exhibition[]) || []).map((e) => ({
         ...e,
+        city: e.city_es,
         project_title: projectMap.get(e.project_id) || "—",
+        image_count: imgCounts.get(e.id) || 0,
       }))
     );
     setLoading(false);
@@ -114,14 +129,17 @@ export default function ExhibitionsAdminPage() {
     setForm({
       project_id: item.project_id,
       slug: item.slug,
-      city: item.city,
-      venue: item.venue || "",
+      city_es: item.city_es || "",
+      city_en: item.city_en || "",
+      city_fr: item.city_fr || "",
+      venue_es: item.venue_es || "",
+      venue_en: item.venue_en || "",
+      venue_fr: item.venue_fr || "",
       date_from: item.date_from || "",
       date_to: item.date_to || "",
       description_es: item.description_es || "",
       description_en: item.description_en || "",
       description_fr: item.description_fr || "",
-      image_url: item.image_url || "",
       is_published: item.is_published,
     });
     loadGallery(item.id);
@@ -149,12 +167,15 @@ export default function ExhibitionsAdminPage() {
 
     const payload = {
       ...form,
-      venue: form.venue || null,
+      city_en: form.city_en || null,
+      city_fr: form.city_fr || null,
+      venue_es: form.venue_es || null,
+      venue_en: form.venue_en || null,
+      venue_fr: form.venue_fr || null,
       date_from: form.date_from || null,
       date_to: form.date_to || null,
       description_en: form.description_en || null,
       description_fr: form.description_fr || null,
-      image_url: form.image_url || null,
     };
 
     let exhibitionId = editingId;
@@ -209,8 +230,8 @@ export default function ExhibitionsAdminPage() {
     fetchData();
   }
 
-  async function handleDelete(id: string, city: string) {
-    if (!window.confirm(`Eliminar exposicion "${city}"?`)) return;
+  async function handleDelete(id: string, cityName: string) {
+    if (!window.confirm(`Eliminar exposicion "${cityName}"?`)) return;
     await supabase.from("exhibitions").delete().eq("id", id);
     fetchData();
   }
@@ -269,6 +290,7 @@ export default function ExhibitionsAdminPage() {
               <th className="text-left px-4 py-3 font-medium text-neutral-600">Proyecto</th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600">Recinto</th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600">Fechas</th>
+              <th className="text-left px-4 py-3 font-medium text-neutral-600 w-20">Info</th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600 w-20">Estado</th>
               <th className="text-right px-4 py-3 font-medium text-neutral-600 w-28">Acciones</th>
             </tr>
@@ -276,13 +298,16 @@ export default function ExhibitionsAdminPage() {
           <tbody>
             {filteredItems.map((item) => (
               <tr key={item.id} className="border-b border-neutral-100 hover:bg-neutral-50">
-                <td className="px-4 py-3 font-medium text-neutral-900">{item.city}</td>
+                <td className="px-4 py-3 font-medium text-neutral-900">{item.city_es}</td>
                 <td className="px-4 py-3 text-neutral-500">{item.project_title}</td>
-                <td className="px-4 py-3 text-neutral-500">{item.venue || "—"}</td>
+                <td className="px-4 py-3 text-neutral-500">{item.venue_es || "—"}</td>
                 <td className="px-4 py-3 text-neutral-500 text-xs">
                   {item.date_from && item.date_to
-                    ? `${item.date_from} — ${item.date_to}`
-                    : item.date_from || "—"}
+                    ? `${formatDate(item.date_from, "es")} — ${formatDate(item.date_to, "es")}`
+                    : item.date_from ? formatDate(item.date_from, "es") : "—"}
+                </td>
+                <td className="px-4 py-3">
+                  <CompletenessIndicator missing={getExhibitionMissing(item)} />
                 </td>
                 <td className="px-4 py-3">
                   <button onClick={() => togglePublished(item.id, item.is_published)}>
@@ -298,7 +323,7 @@ export default function ExhibitionsAdminPage() {
                     <button onClick={() => openEdit(item)} className="p-1.5 text-neutral-500 hover:text-brand-600" aria-label="Editar">
                       <Pencil size={15} />
                     </button>
-                    <button onClick={() => handleDelete(item.id, item.city)} className="p-1.5 text-neutral-500 hover:text-red-600" aria-label="Eliminar">
+                    <button onClick={() => handleDelete(item.id, item.city_es)} className="p-1.5 text-neutral-500 hover:text-red-600" aria-label="Eliminar">
                       <Trash2 size={15} />
                     </button>
                   </div>
@@ -307,7 +332,7 @@ export default function ExhibitionsAdminPage() {
             ))}
             {filteredItems.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-neutral-400">
+                <td colSpan={7} className="px-4 py-8 text-center text-neutral-400">
                   No hay exposiciones.
                 </td>
               </tr>
@@ -334,22 +359,18 @@ export default function ExhibitionsAdminPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
+            <LocalizedInputs
+              field="city"
+              label="Ciudad"
+              values={{ es: form.city_es, en: form.city_en, fr: form.city_fr }}
+              onChange={(lang, val) => {
+                setForm((f) => ({ ...f, [`city_${lang}`]: val }));
+                if (!editingId && lang === "es") setForm((f) => ({ ...f, slug: autoSlug(val), city_es: val }));
+              }}
+              required
+            />
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">Ciudad *</label>
-              <input
-                type="text"
-                value={form.city}
-                onChange={(e) => {
-                  setForm((f) => ({ ...f, city: e.target.value }));
-                  if (!editingId) setForm((f) => ({ ...f, slug: autoSlug(e.target.value), city: e.target.value }));
-                }}
-                required
-                className="w-full px-3 py-2 border border-neutral-300 text-sm focus:outline-none focus:border-brand-600"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">Slug</label>
-              <p className="text-xs text-neutral-400 mb-2">Auto-generado de la ciudad.</p>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">Slug</label>
               <input
                 type="text"
                 value={form.slug}
@@ -360,19 +381,17 @@ export default function ExhibitionsAdminPage() {
                 required
                 className={`w-full px-3 py-2 border text-sm focus:outline-none ${slugError ? "border-red-500 focus:border-red-500" : "border-neutral-300 focus:border-brand-600"}`}
               />
+              <p className="text-xs text-neutral-400 mt-1">Auto-generado de la ciudad.</p>
               {slugError && <p className="text-xs text-red-600 mt-1">{slugError}</p>}
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">Recinto</label>
-            <input
-              type="text"
-              value={form.venue}
-              onChange={(e) => setForm((f) => ({ ...f, venue: e.target.value }))}
-              className="w-full px-3 py-2 border border-neutral-300 text-sm focus:outline-none focus:border-brand-600"
-            />
-          </div>
+          <LocalizedInputs
+            field="venue"
+            label="Recinto"
+            values={{ es: form.venue_es, en: form.venue_en, fr: form.venue_fr }}
+            onChange={(lang, val) => setForm((f) => ({ ...f, [`venue_${lang}`]: val }))}
+          />
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -399,13 +418,6 @@ export default function ExhibitionsAdminPage() {
             label="Descripcion"
             values={{ es: form.description_es, en: form.description_en, fr: form.description_fr }}
             onChange={(lang, val) => setForm((f) => ({ ...f, [`description_${lang}`]: val }))}
-          />
-
-          <ImageUpload
-            label="Imagen principal"
-            value={form.image_url}
-            onChange={(url) => setForm((f) => ({ ...f, image_url: url }))}
-            folder="exhibitions"
           />
 
           {/* Gallery */}
