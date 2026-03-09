@@ -82,6 +82,26 @@ html {
   display: none;
 }
 
+/* Hero CSS animations (no JS needed for LCP) */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scrollBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
 /* Marquee animation for collaborators */
 @keyframes marquee {
   0% {

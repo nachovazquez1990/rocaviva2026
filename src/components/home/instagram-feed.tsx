@@ -46,8 +46,9 @@ export function InstagramFeed({ content }: { content: HomeContentMap }) {
   const [feed, setFeed] = useState<BeholdFeed | null>(null);
   const [error, setError] = useState(false);
 
+  // Defer fetch until section is near viewport
   useEffect(() => {
-    if (!BEHOLD_FEED_ID) return;
+    if (!BEHOLD_FEED_ID || !inView) return;
 
     fetch(BEHOLD_API_URL)
       .then((res) => {
@@ -56,7 +57,7 @@ export function InstagramFeed({ content }: { content: HomeContentMap }) {
       })
       .then((data: BeholdFeed) => setFeed(data))
       .catch(() => setError(true));
-  }, []);
+  }, [inView]);
 
   const posts = feed?.posts ?? [];
   const username = feed?.username ?? "rocavivaeventos";

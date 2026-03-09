@@ -30,19 +30,22 @@ export async function generateMetadata({
   const messages = await getMessages({ locale });
   const meta = messages.metadata as Record<string, string>;
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://rocaviva.eu";
+  const canonicalPath = locale === "es" ? "/" : `/${locale}`;
+
   return {
     title: {
       default: meta.title,
       template: `%s | Rocaviva Eventos`,
     },
     description: meta.description,
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://rocaviva.eu"),
+    metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: locale === "es" ? "/" : `/${locale}`,
+      canonical: `${baseUrl}${canonicalPath}`,
       languages: {
-        es: "/",
-        en: "/en",
-        fr: "/fr",
+        es: `${baseUrl}/`,
+        en: `${baseUrl}/en`,
+        fr: `${baseUrl}/fr`,
       },
     },
     openGraph: {
