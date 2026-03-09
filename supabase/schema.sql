@@ -158,12 +158,38 @@ create table public.home_content (
   updated_at timestamptz default now()
 );
 
--- Insert default home content keys
+-- Insert default home content keys (run scripts/seed-home-content.sql for full content)
 insert into public.home_content (key, value_es, value_en, value_fr) values
-  ('about_text', '', '', ''),
-  ('services_text', '', '', ''),
-  ('contact_text', '', '', ''),
-  ('hero_subtitle', '', '', '');
+  ('hero_subtitle', '', '', ''),
+  ('hero_cta', '', '', ''),
+  ('about_title', '', '', ''),
+  ('about_intro', '', '', ''),
+  ('about_exhibition_1', '', '', ''),
+  ('about_exhibition_2', '', '', ''),
+  ('about_exhibition_3', '', '', ''),
+  ('about_exhibition_4', '', '', ''),
+  ('about_projects', '', '', ''),
+  ('about_collaborators', '', '', ''),
+  ('about_nobel', '', '', ''),
+  ('about_readings', '', '', ''),
+  ('about_yo_te_aplaudo', '', '', ''),
+  ('services_title', '', '', ''),
+  ('service_exhibitions', '', '', ''),
+  ('service_exhibitions_desc', '', '', ''),
+  ('service_guided_tours', '', '', ''),
+  ('service_guided_tours_desc', '', '', ''),
+  ('service_conferences', '', '', ''),
+  ('service_conferences_desc', '', '', ''),
+  ('service_readings', '', '', ''),
+  ('service_readings_desc', '', '', ''),
+  ('service_workshops', '', '', ''),
+  ('service_workshops_desc', '', '', ''),
+  ('service_commemorations', '', '', ''),
+  ('service_commemorations_desc', '', '', ''),
+  ('contact_title', '', '', ''),
+  ('contact_cta', '', '', ''),
+  ('contact_button', '', '', ''),
+  ('social_title', '', '', '');
 
 -- ============================================
 -- ROW LEVEL SECURITY

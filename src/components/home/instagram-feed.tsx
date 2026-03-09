@@ -10,6 +10,7 @@ import {
   staggerItem,
   lineReveal,
 } from "@/components/animations/motion-variants";
+import type { HomeContentMap } from "@/app/[locale]/(public)/page";
 
 const BEHOLD_FEED_ID = process.env.NEXT_PUBLIC_BEHOLD_FEED_ID;
 const BEHOLD_API_URL = `https://feeds.behold.so/${BEHOLD_FEED_ID}`;
@@ -37,8 +38,9 @@ interface BeholdFeed {
   posts: BeholdPost[];
 }
 
-export function InstagramFeed() {
+export function InstagramFeed({ content }: { content: HomeContentMap }) {
   const t = useTranslations("home");
+  const c = (dbKey: string, tKey: string) => content[dbKey] || t(tKey);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const [feed, setFeed] = useState<BeholdFeed | null>(null);
@@ -76,7 +78,7 @@ export function InstagramFeed() {
             id="social-title"
             className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-neutral-900"
           >
-            {t("socialTitle")}
+            {c("social_title", "socialTitle")}
           </h2>
           <motion.div
             variants={lineReveal}

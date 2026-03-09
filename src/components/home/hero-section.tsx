@@ -4,9 +4,11 @@ import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "@/lib/i18n/navigation";
+import type { HomeContentMap } from "@/app/[locale]/(public)/page";
 
-export function HeroSection() {
+export function HeroSection({ content }: { content: HomeContentMap }) {
   const t = useTranslations("home");
+  const c = (dbKey: string, tKey: string) => content[dbKey] || t(tKey);
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -38,7 +40,7 @@ export function HeroSection() {
         className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center"
       >
         <p className="text-xs tracking-[0.35em] uppercase text-white/90 mb-6">
-          {t("heroSubtitle")}
+          {c("hero_subtitle", "heroSubtitle")}
         </p>
 
         <h1 className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight text-white">
@@ -54,7 +56,7 @@ export function HeroSection() {
             href="/projects"
             className="inline-block px-10 py-4 text-xs font-medium tracking-[0.2em] uppercase text-white border border-white/60 hover:bg-white hover:text-neutral-900 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
-            {t("heroCta")}
+            {c("hero_cta", "heroCta")}
           </Link>
         </div>
       </motion.div>
