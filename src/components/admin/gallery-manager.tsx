@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { Upload, X, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Upload, X, Loader2, GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface GalleryImage {
@@ -33,6 +33,9 @@ export function GalleryManager({
 }: GalleryManagerProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [dragOverUpload, setDragOverUpload] = useState(false);
+  const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   async function handleUpload(files: FileList) {
@@ -99,13 +102,22 @@ export function GalleryManager({
     onChange(updated);
   }
 
-  function moveImage(index: number, direction: "left" | "right") {
-    const swapIdx = direction === "left" ? index - 1 : index + 1;
-    if (swapIdx < 0 || swapIdx >= images.length) return;
-
+  function handleReorderDrop(targetIdx: number) {
+    if (dragIdx === null || dragIdx === targetIdx) return;
     const updated = [...images];
-    [updated[index], updated[swapIdx]] = [updated[swapIdx], updated[index]];
+    const [moved] = updated.splice(dragIdx, 1);
+    updated.splice(targetIdx, 0, moved);
     onChange(updated.map((img, i) => ({ ...img, display_order: i })));
+    setDragIdx(null);
+    setDragOverIdx(null);
+  }
+
+  function handleUploadDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setDragOverUpload(false);
+    if (e.dataTransfer.files?.length) {
+      handleUpload(e.dataTransfer.files);
+    }
   }
 
   return (
@@ -123,27 +135,34 @@ export function GalleryManager({
           {images.map((img, idx) => (
             <div
               key={img.image_url + idx}
-              className="relative group aspect-square bg-neutral-100 overflow-hidden border border-neutral-200"
+              draggable
+              onDragStart={() => setDragIdx(idx)}
+              onDragEnd={() => { setDragIdx(null); setDragOverIdx(null); }}
+              onDragOver={(e) => { e.preventDefault(); setDragOverIdx(idx); }}
+              onDragLeave={() => setDragOverIdx(null)}
+              onDrop={(e) => { e.preventDefault(); handleReorderDrop(idx); }}
+              className={cn(
+                "relative group aspect-square bg-neutral-100 overflow-hidden border-2 cursor-grab active:cursor-grabbing transition-all",
+                dragOverIdx === idx && dragIdx !== idx
+                  ? "border-brand-500 scale-[1.03]"
+                  : dragIdx === idx
+                    ? "border-brand-300 opacity-50"
+                    : "border-neutral-200"
+              )}
             >
               <Image
                 src={img.image_url}
                 alt=""
                 fill
-                className="object-cover"
+                className="object-cover pointer-events-none"
                 unoptimized
               />
 
               {/* Overlay controls */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
-                <button
-                  type="button"
-                  onClick={() => moveImage(idx, "left")}
-                  disabled={idx === 0}
-                  className="p-1 bg-white/90 text-neutral-700 disabled:opacity-30"
-                  title="Mover izquierda"
-                >
-                  <ChevronLeft size={14} />
-                </button>
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+                <div className="p-1 bg-white/90 text-neutral-500" title="Arrastra para reordenar">
+                  <GripVertical size={14} />
+                </div>
                 <button
                   type="button"
                   onClick={() => handleRemove(idx)}
@@ -151,15 +170,6 @@ export function GalleryManager({
                   title="Eliminar"
                 >
                   <X size={14} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => moveImage(idx, "right")}
-                  disabled={idx === images.length - 1}
-                  className="p-1 bg-white/90 text-neutral-700 disabled:opacity-30"
-                  title="Mover derecha"
-                >
-                  <ChevronRight size={14} />
                 </button>
               </div>
 
@@ -176,8 +186,14 @@ export function GalleryManager({
       {images.length < maxImages && (
         <div
           onClick={() => inputRef.current?.click()}
+          onDrop={handleUploadDrop}
+          onDragOver={(e) => { e.preventDefault(); setDragOverUpload(true); }}
+          onDragLeave={() => setDragOverUpload(false)}
           className={cn(
-            "border-2 border-dashed border-neutral-300 hover:border-brand-400 px-4 py-4 text-center cursor-pointer transition-colors",
+            "border-2 border-dashed px-4 py-4 text-center cursor-pointer transition-colors",
+            dragOverUpload
+              ? "border-brand-500 bg-brand-50"
+              : "border-neutral-300 hover:border-brand-400",
             uploading && "pointer-events-none opacity-60"
           )}
         >
@@ -189,7 +205,7 @@ export function GalleryManager({
           ) : (
             <div className="flex items-center justify-center gap-2">
               <Upload size={18} className="text-neutral-400" />
-              <span className="text-sm text-neutral-500">Anadir imagenes</span>
+              <span className="text-sm text-neutral-500">Arrastra imagenes o haz clic</span>
               <span className="text-xs text-neutral-400">(max {maxSizeMB}MB/foto, max {maxImages} fotos)</span>
             </div>
           )}

@@ -20,32 +20,47 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "No se ha proporcionado archivo" }, { status: 400 });
   }
 
-  // Validate file type
-  const imageTypes = ["image/jpeg", "image/png", "image/webp", "image/svg+xml", "image/gif"];
-  const docTypes = ["application/pdf", "application/epub+zip", "application/x-mobipocket-ebook"];
-  const allowedTypes = [...imageTypes, ...docTypes];
-  if (!allowedTypes.includes(file.type)) {
-    return NextResponse.json(
-      { error: "Tipo de archivo no permitido. Usa JPG, PNG, WebP, SVG, GIF, PDF, EPUB o MOBI." },
-      { status: 400 }
-    );
+  // Validate file type (by MIME and extension, some browsers misreport ODT MIME)
+  const ext = file.name.split(".").pop()?.toLowerCase();
+  const isDossier = folder === "dossiers";
+
+  if (isDossier) {
+    // Dossiers: only PDF and ODT
+    const dossierMimes = ["application/pdf", "application/vnd.oasis.opendocument.text"];
+    const dossierExts = ["pdf", "odt"];
+    if (!dossierMimes.includes(file.type) && (!ext || !dossierExts.includes(ext))) {
+      return NextResponse.json(
+        { error: "Solo se permiten archivos PDF o ODT." },
+        { status: 400 }
+      );
+    }
+  } else {
+    // Other uploads: images only
+    const imageTypes = ["image/jpeg", "image/png", "image/webp", "image/svg+xml", "image/gif"];
+    const imageExts = ["jpg", "jpeg", "png", "webp", "svg", "gif"];
+    if (!imageTypes.includes(file.type) && (!ext || !imageExts.includes(ext))) {
+      return NextResponse.json(
+        { error: "Solo se permiten imagenes: JPG, PNG, WebP, SVG o GIF." },
+        { status: 400 }
+      );
+    }
   }
 
-  // Max 50MB for documents, 10MB for images
-  const maxSize = docTypes.includes(file.type) ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+  // Max 60MB for dossiers, 10MB for images
+  const maxSize = isDossier ? 60 * 1024 * 1024 : 10 * 1024 * 1024;
   if (file.size > maxSize) {
     const maxMB = maxSize / (1024 * 1024);
     return NextResponse.json({ error: `El archivo supera los ${maxMB}MB` }, { status: 400 });
   }
 
   // Generate unique filename
-  const ext = file.name.split(".").pop() || "jpg";
+  const fileExt = file.name.split(".").pop() || "jpg";
   const timestamp = Date.now();
   const safeName = file.name
     .replace(/\.[^.]+$/, "")
     .replace(/[^a-zA-Z0-9-_]/g, "-")
     .slice(0, 50);
-  const pathname = `rocaviva/${folder}/${safeName}-${timestamp}.${ext}`;
+  const pathname = `rocaviva/${folder}/${safeName}-${timestamp}.${fileExt}`;
 
   const blob = await put(pathname, file, {
     access: "public",

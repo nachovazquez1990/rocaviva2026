@@ -130,7 +130,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
       onTouchEnd={handleTouchEnd}
     >
       {/* Slides */}
-      <AnimatePresence initial={false} custom={direction} mode="wait">
+      <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
           key={current}
           custom={direction}

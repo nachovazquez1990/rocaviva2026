@@ -19,16 +19,27 @@ export function FileUpload({
   onChange,
   folder = "files",
   label,
-  accept = ".pdf,.epub,.mobi",
-  hint = "PDF, EPUB o MOBI. Max 50MB",
+  accept = ".pdf,.odt",
+  hint = "PDF o ODT. Max 60MB",
   className,
 }: FileUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   async function handleUpload(file: File) {
     setError("");
+
+    // Client-side file type validation
+    const allowedExts = accept.split(",").map((e) => e.trim().toLowerCase());
+    const fileExt = `.${file.name.split(".").pop()?.toLowerCase()}`;
+    if (!allowedExts.includes(fileExt)) {
+      const readable = allowedExts.map((e) => e.replace(".", "").toUpperCase()).join(", ");
+      setError(`Formato no permitido. Solo se aceptan: ${readable}`);
+      return;
+    }
+
     setUploading(true);
 
     const formData = new FormData();
@@ -98,8 +109,19 @@ export function FileUpload({
       ) : (
         <div
           onClick={() => inputRef.current?.click()}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragOver(false);
+            const file = e.dataTransfer.files?.[0];
+            if (file) handleUpload(file);
+          }}
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+          onDragLeave={() => setDragOver(false)}
           className={cn(
-            "border-2 border-dashed border-neutral-300 hover:border-brand-400 px-6 py-6 text-center cursor-pointer transition-colors",
+            "border-2 border-dashed px-6 py-6 text-center cursor-pointer transition-colors",
+            dragOver
+              ? "border-brand-500 bg-brand-50"
+              : "border-neutral-300 hover:border-brand-400",
             uploading && "pointer-events-none opacity-60"
           )}
         >
@@ -111,7 +133,7 @@ export function FileUpload({
           ) : (
             <div className="flex flex-col items-center gap-2">
               <Upload size={24} className="text-neutral-400" />
-              <span className="text-sm text-neutral-500">Haz clic para seleccionar archivo</span>
+              <span className="text-sm text-neutral-500">Arrastra un archivo o haz clic para seleccionar</span>
               <span className="text-xs text-neutral-400">{hint}</span>
             </div>
           )}

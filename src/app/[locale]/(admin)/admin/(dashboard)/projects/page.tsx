@@ -11,6 +11,7 @@ import { ImageUpload } from "@/components/admin/image-upload";
 import { FileUpload } from "@/components/admin/file-upload";
 import { GalleryManager } from "@/components/admin/gallery-manager";
 import { Plus, Pencil, Trash2, GripVertical, Eye, EyeOff } from "lucide-react";
+import { CompletenessIndicator, getProjectMissing } from "@/components/admin/completeness-indicator";
 
 interface ProjectForm {
   slug: string;
@@ -53,7 +54,7 @@ const emptyForm: ProjectForm = {
 
 export default function ProjectsAdminPage() {
   const supabase = createClient();
-  const [items, setItems] = useState<Project[]>([]);
+  const [items, setItems] = useState<(Project & { image_count: number })[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -63,11 +64,20 @@ export default function ProjectsAdminPage() {
   const [slugError, setSlugError] = useState("");
 
   const fetchItems = useCallback(async () => {
-    const { data } = await supabase
-      .from("projects")
-      .select("*")
-      .order("display_order", { ascending: true });
-    setItems((data as Project[]) || []);
+    const [{ data }, { data: imgData }] = await Promise.all([
+      supabase.from("projects").select("*").order("display_order", { ascending: true }),
+      supabase.from("project_images").select("project_id"),
+    ]);
+    const imgCounts = new Map<string, number>();
+    (imgData || []).forEach((img: { project_id: string }) => {
+      imgCounts.set(img.project_id, (imgCounts.get(img.project_id) || 0) + 1);
+    });
+    setItems(
+      ((data as Project[]) || []).map((p) => ({
+        ...p,
+        image_count: imgCounts.get(p.id) || 0,
+      }))
+    );
     setLoading(false);
   }, [supabase]);
 
@@ -264,6 +274,7 @@ export default function ProjectsAdminPage() {
               <th className="text-left px-4 py-3 font-medium text-neutral-600 w-10"></th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600">Proyecto</th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600">Slug</th>
+              <th className="text-left px-4 py-3 font-medium text-neutral-600 w-20">Info</th>
               <th className="text-left px-4 py-3 font-medium text-neutral-600 w-20">Estado</th>
               <th className="text-right px-4 py-3 font-medium text-neutral-600 w-32">Acciones</th>
             </tr>
@@ -293,6 +304,9 @@ export default function ProjectsAdminPage() {
                 </td>
                 <td className="px-4 py-3 text-neutral-500">{item.slug}</td>
                 <td className="px-4 py-3">
+                  <CompletenessIndicator missing={getProjectMissing(item)} />
+                </td>
+                <td className="px-4 py-3">
                   <button
                     onClick={() => togglePublished(item.id, item.is_published)}
                     className="flex items-center gap-1"
@@ -319,7 +333,7 @@ export default function ProjectsAdminPage() {
             ))}
             {items.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-neutral-400">
+                <td colSpan={6} className="px-4 py-8 text-center text-neutral-400">
                   No hay proyectos. Crea el primero.
                 </td>
               </tr>
@@ -398,24 +412,24 @@ export default function ProjectsAdminPage() {
                 value={form.dossier_url_es}
                 onChange={(url) => setForm((f) => ({ ...f, dossier_url_es: url }))}
                 folder="dossiers"
-                accept=".pdf"
-                hint="PDF. Max 50MB"
+                accept=".pdf,.odt"
+                hint="PDF o ODT. Max 60MB"
               />
               <FileUpload
                 label="Ingles"
                 value={form.dossier_url_en}
                 onChange={(url) => setForm((f) => ({ ...f, dossier_url_en: url }))}
                 folder="dossiers"
-                accept=".pdf"
-                hint="PDF. Max 50MB"
+                accept=".pdf,.odt"
+                hint="PDF o ODT. Max 60MB"
               />
               <FileUpload
                 label="Frances"
                 value={form.dossier_url_fr}
                 onChange={(url) => setForm((f) => ({ ...f, dossier_url_fr: url }))}
                 folder="dossiers"
-                accept=".pdf"
-                hint="PDF. Max 50MB"
+                accept=".pdf,.odt"
+                hint="PDF o ODT. Max 60MB"
               />
             </div>
           </div>
