@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { motion, useInView } from "framer-motion";
 import type { Easing } from "framer-motion";
-import type { HomeContentMap } from "@/app/[locale]/(public)/page";
+import type { HomeContentMap } from "@/lib/supabase/types";
 
 const ease: Easing = [0.16, 1, 0.3, 1];
 

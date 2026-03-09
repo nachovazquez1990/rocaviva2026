@@ -10,7 +10,7 @@ import {
   staggerItem,
   lineReveal,
 } from "@/components/animations/motion-variants";
-import type { HomeContentMap } from "@/app/[locale]/(public)/page";
+import type { HomeContentMap } from "@/lib/supabase/types";
 
 const BEHOLD_FEED_ID = process.env.NEXT_PUBLIC_BEHOLD_FEED_ID;
 const BEHOLD_API_URL = `https://feeds.behold.so/${BEHOLD_FEED_ID}`;

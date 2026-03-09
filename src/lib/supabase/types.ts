@@ -161,6 +161,9 @@ export interface AnalyticsEvent {
   created_at: string;
 }
 
+// Home content map (key → localized value)
+export type HomeContentMap = Record<string, string>;
+
 // Helper type to get localized field
 export type LocalizedField<T> = T extends { [K in `${string}_es`]: infer V } ? V : never;
 

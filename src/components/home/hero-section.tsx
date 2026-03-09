@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "@/lib/i18n/navigation";
-import type { HomeContentMap } from "@/app/[locale]/(public)/page";
+import type { HomeContentMap } from "@/lib/supabase/types";
 
 export function HeroSection({ content }: { content: HomeContentMap }) {
   const t = useTranslations("home");

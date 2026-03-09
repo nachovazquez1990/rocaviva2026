@@ -2,27 +2,30 @@ import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getLocalizedField } from "@/lib/supabase/types";
+import type { HomeContentMap } from "@/lib/supabase/types";
 import { HeroSection } from "@/components/home/hero-section";
 import { AboutSection } from "@/components/home/about-section";
 import { ServicesSection } from "@/components/home/services-section";
 import { ContactSection } from "@/components/home/contact-section";
 import { InstagramFeed } from "@/components/home/instagram-feed";
 
-export type HomeContentMap = Record<string, string>;
-
 type Props = {
   params: Promise<{ locale: string }>;
 };
 
 async function getHomeContent(locale: string): Promise<HomeContentMap> {
-  const supabase = await createClient();
-  const { data } = await supabase.from("home_content").select("*");
-  const map: HomeContentMap = {};
-  for (const item of data || []) {
-    const value = getLocalizedField(item, "value", locale);
-    if (value) map[item.key] = value;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.from("home_content").select("*");
+    const map: HomeContentMap = {};
+    for (const item of data || []) {
+      const value = getLocalizedField(item, "value", locale);
+      if (value) map[item.key] = value;
+    }
+    return map;
+  } catch {
+    return {};
   }
-  return map;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
