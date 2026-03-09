@@ -19,8 +19,8 @@ export function HeroSection({ content }: { content: HomeContentMap }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
       </div>
 
-      {/* Content — CSS fade-in for fast LCP */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center animate-[fadeIn_0.8s_ease-out]">
+      {/* Content — immediately visible for fast LCP */}
+      <div className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center">
         <p className="text-xs tracking-[0.35em] uppercase text-white/90 mb-6">
           {c("hero_subtitle", "heroSubtitle")}
         </p>

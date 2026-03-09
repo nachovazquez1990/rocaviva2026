@@ -21,7 +21,17 @@ async function runAudit() {
     screenEmulation: isMobile
       ? undefined
       : { mobile: false, width: 1350, height: 940, deviceScaleFactor: 1, disabled: false },
-    throttling: isMobile ? undefined : { cpuSlowdownMultiplier: 1 },
+    throttling: isMobile
+      ? undefined
+      : {
+          rttMs: 0,
+          throughputKbps: 0,
+          requestLatencyMs: 0,
+          downloadThroughputKbps: 0,
+          uploadThroughputKbps: 0,
+          cpuSlowdownMultiplier: 1,
+        },
+    throttlingMethod: isMobile ? "simulate" : "provided",
   };
 
   const result = await lighthouse(url, options);
@@ -60,13 +70,124 @@ async function runAudit() {
     console.log("");
   }
 
+  // Show LCP details
+  const lcpAudit = audits["largest-contentful-paint-element"];
+  if (lcpAudit?.details?.items?.length) {
+    console.log("  LCP element:");
+    lcpAudit.details.items.forEach((item) => {
+      console.log(`  - ${item.node?.snippet || item.node?.selector || "unknown"}`);
+      if (item.node?.nodeLabel) console.log(`    Label: ${item.node.nodeLabel}`);
+    });
+    console.log("");
+  }
+
+  // Show LCP timing
+  const lcpMetric = audits["largest-contentful-paint"];
+  if (lcpMetric) {
+    console.log(`  LCP timing: ${lcpMetric.displayValue}`);
+    console.log("");
+  }
+
   // Show CLS details
   const clsAudit = audits["layout-shift-elements"];
   if (clsAudit?.details?.items?.length) {
     console.log("  Layout shift elements:");
     clsAudit.details.items.forEach((item) => {
-      console.log(`  - ${item.node?.snippet || item.node?.selector || "unknown"} (score: ${item.score?.toFixed(4)})`);
+      console.log(`  - snippet: ${item.node?.snippet || "none"}`);
+      console.log(`    selector: ${item.node?.selector || "none"}`);
+      console.log(`    nodeLabel: ${item.node?.nodeLabel || "none"}`);
+      console.log(`    score: ${item.score?.toFixed?.(4) || JSON.stringify(item.score)}`);
+      console.log(`    all keys: ${Object.keys(item).join(", ")}`);
     });
+    console.log("");
+  }
+
+  // Show layout-shifts audit (individual shifts)
+  const layoutShifts = audits["layout-shifts"];
+  if (layoutShifts?.details?.items?.length) {
+    console.log("  Individual layout shifts:");
+    layoutShifts.details.items.forEach((item, i) => {
+      console.log(`  Shift #${i + 1}: score=${item.score?.toFixed?.(4)} ts=${item.startTime?.toFixed?.(0)}ms`);
+      if (item.subItems?.items) {
+        item.subItems.items.forEach((sub) => {
+          console.log(`    - ${sub.node?.snippet || sub.node?.selector || "unknown"}`);
+        });
+      }
+    });
+    console.log("");
+  }
+
+  // Show CLS metric
+  const clsMetric = audits["cumulative-layout-shift"];
+  if (clsMetric) {
+    console.log(`  CLS value: ${clsMetric.displayValue}`);
+    console.log("");
+  }
+
+  // Show TTFB
+  const ttfb = audits["server-response-time"];
+  if (ttfb) {
+    console.log(`  TTFB: ${ttfb.displayValue}`);
+    console.log("");
+  }
+
+  // Show console errors
+  const errorsAudit = audits["errors-in-console"];
+  if (errorsAudit?.details?.items?.length) {
+    console.log("  Browser console errors:");
+    errorsAudit.details.items.slice(0, 5).forEach((item) => {
+      console.log(`  - ${(item.description || item.source || "").slice(0, 200)}`);
+    });
+    console.log("");
+  }
+
+  // Show render-blocking resources
+  const renderBlocking = audits["render-blocking-resources"];
+  if (renderBlocking?.details?.items?.length) {
+    console.log("  Render-blocking resources:");
+    renderBlocking.details.items.forEach((item) => {
+      console.log(`  - ${item.url} (${item.wastedMs}ms wasted)`);
+    });
+    console.log("");
+  }
+
+  // Show unused JS
+  const unusedJs = audits["unused-javascript"];
+  if (unusedJs?.details?.items?.length) {
+    console.log("  Unused JavaScript (top 5):");
+    unusedJs.details.items.slice(0, 5).forEach((item) => {
+      const wasted = (item.wastedBytes / 1024).toFixed(1);
+      const total = (item.totalBytes / 1024).toFixed(1);
+      console.log(`  - ${item.url?.split("/").pop() || item.url} — ${wasted}KB / ${total}KB unused`);
+    });
+    console.log("");
+  }
+
+  // Show canonical audit details
+  const canonAudit = audits["canonical"];
+  if (canonAudit) {
+    console.log("  Canonical audit:");
+    console.log(`  - score: ${canonAudit.score}`);
+    console.log(`  - explanation: ${canonAudit.explanation || "none"}`);
+    if (canonAudit.details?.items) {
+      canonAudit.details.items.forEach((item) => {
+        console.log(`  - ${JSON.stringify(item)}`);
+      });
+    }
+    console.log("");
+  }
+
+  // Dump layout-shift-elements raw data
+  if (clsAudit?.details) {
+    console.log("  CLS raw details:");
+    console.log(`  ${JSON.stringify(clsAudit.details).slice(0, 500)}`);
+    console.log("");
+  }
+
+  // Dump layout-shifts raw data
+  if (layoutShifts?.details) {
+    console.log("  Layout shifts raw:");
+    console.log(`  ${JSON.stringify(layoutShifts.details).slice(0, 800)}`);
     console.log("");
   }
 
@@ -81,6 +202,11 @@ async function runAudit() {
     });
     console.log("");
   }
+
+  // Save full report for debugging
+  const fs = await import("fs");
+  fs.writeFileSync("lighthouse-report.json", JSON.stringify(result.lhr, null, 2));
+  console.log("  Full report saved to lighthouse-report.json\n");
 
   await chrome.kill();
 
