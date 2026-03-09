@@ -64,6 +64,7 @@ interface MockBook {
   description: Record<string, string>;
   image_url: string;
   extra_image_url: string;
+  stamp_message: Record<string, string>;
   files: { file_url: string; label: string | null; part_number: number }[];
 }
 
@@ -82,6 +83,11 @@ const MOCK_BOOKS: MockBook[] = [
     },
     image_url: "https://picsum.photos/seed/book-cover/600/800",
     extra_image_url: "https://picsum.photos/seed/book-stamp/400/200",
+    stamp_message: {
+      es: "La edición digital de este libro está subvencionada por el Ministerio de Cultura y Deporte",
+      en: "The digital edition of this book is subsidized by the Ministry of Culture and Sport",
+      fr: "L'édition numérique de ce livre est subventionnée par le Ministère de la Culture et du Sport",
+    },
     files: [
       { file_url: "#download-part1", label: "Parte 1", part_number: 1 },
       { file_url: "#download-part2", label: "Parte 2", part_number: 2 },
@@ -147,6 +153,7 @@ export interface BookItem {
   description: string;
   image_url: string | null;
   extra_image_url: string | null;
+  stamp_message: string | null;
   files: BookFilePart[];
 }
 
@@ -168,6 +175,7 @@ export default async function BooksPage({ params }: Props) {
         description: b.description[locale] ?? b.description.es,
         image_url: b.image_url,
         extra_image_url: b.extra_image_url,
+        stamp_message: b.stamp_message[locale] ?? b.stamp_message.es ?? null,
         files: b.files,
       }))
     : dbBooks.map((b) => ({
@@ -176,6 +184,7 @@ export default async function BooksPage({ params }: Props) {
         description: getLocalizedField(b, "description", locale),
         image_url: b.image_url,
         extra_image_url: b.extra_image_url,
+        stamp_message: getLocalizedField(b, "stamp_message", locale) || null,
         files: bookFiles[b.id] || [],
       }));
 

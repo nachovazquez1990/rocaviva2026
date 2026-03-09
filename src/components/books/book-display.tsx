@@ -20,38 +20,62 @@ export function BookDisplay({ book }: BookDisplayProps) {
       variants={staggerContainer}
       className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16"
     >
-      {/* Left: Book cover + stamp image */}
-      <motion.div variants={staggerItem} className="space-y-8">
+      {/* Left on desktop (second on mobile): Banner + Form + Stamp + Message */}
+      <motion.div variants={staggerItem} className="order-2 lg:order-1 space-y-8">
+        {/* Banner image */}
         {book.image_url && (
-          <div className="relative aspect-[3/4] w-full max-w-md mx-auto lg:mx-0 bg-white shadow-lg">
-            <Image
-              src={book.image_url}
-              alt={book.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-            />
-          </div>
-        )}
-
-        {book.extra_image_url && (
           <motion.div variants={fadeInUp}>
-            <div className="relative aspect-[4/1] w-full mx-auto lg:mx-0 bg-neutral-100 overflow-hidden">
+            <div className="relative w-full overflow-hidden">
               <Image
-                src={book.extra_image_url}
-                alt=""
-                fill
-                className="object-contain"
+                src={book.image_url}
+                alt={book.title}
+                width={800}
+                height={200}
+                className="w-full h-auto object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
               />
             </div>
           </motion.div>
         )}
+
+        {/* Download form — always show */}
+        <motion.div variants={fadeInUp}>
+          <BookForm
+            bookId={book.id}
+            files={book.files}
+          />
+        </motion.div>
+
+        {/* Stamp image */}
+        {book.extra_image_url && (
+          <motion.div variants={fadeInUp}>
+            <div className="relative w-48 mx-auto lg:mx-0">
+              <Image
+                src={book.extra_image_url}
+                alt=""
+                width={192}
+                height={96}
+                className="w-auto h-auto object-contain"
+                sizes="192px"
+              />
+            </div>
+          </motion.div>
+        )}
+
+        {/* Stamp message */}
+        {book.stamp_message && (
+          <motion.p
+            variants={fadeInUp}
+            className="text-sm text-neutral-500 italic leading-relaxed lg:max-w-sm"
+          >
+            {book.stamp_message}
+          </motion.p>
+        )}
       </motion.div>
 
-      {/* Right: Description + Form */}
-      <div className="space-y-10">
+      {/* Right on desktop (first on mobile): Title + Description */}
+      <motion.div variants={staggerItem} className="order-1 lg:order-2 space-y-8">
         <motion.div variants={fadeInUp}>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-neutral-900 mb-6">
             {book.title}
@@ -61,24 +85,7 @@ export function BookDisplay({ book }: BookDisplayProps) {
             className="text-neutral-600 leading-relaxed text-base sm:text-lg"
           />
         </motion.div>
-
-        {/* Separator */}
-        <motion.div
-          variants={fadeInUp}
-          className="w-16 h-px bg-brand-600"
-          aria-hidden="true"
-        />
-
-        {/* Download form */}
-        {book.files.length > 0 && (
-          <motion.div variants={fadeInUp}>
-            <BookForm
-              bookId={book.id}
-              files={book.files}
-            />
-          </motion.div>
-        )}
-      </div>
+      </motion.div>
     </motion.article>
   );
 }

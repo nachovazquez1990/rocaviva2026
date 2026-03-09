@@ -21,6 +21,9 @@ interface BookForm {
   description_fr: string;
   image_url: string;
   extra_image_url: string;
+  stamp_message_es: string;
+  stamp_message_en: string;
+  stamp_message_fr: string;
   is_published: boolean;
 }
 
@@ -40,6 +43,9 @@ const emptyForm: BookForm = {
   description_fr: "",
   image_url: "",
   extra_image_url: "",
+  stamp_message_es: "",
+  stamp_message_en: "",
+  stamp_message_fr: "",
   is_published: true,
 };
 
@@ -77,11 +83,15 @@ export default function BooksAdminPage() {
   }, [fetchItems]);
 
   async function loadFileParts(bookId: string) {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("book_files")
       .select("*")
       .eq("book_id", bookId)
       .order("part_number", { ascending: true });
+
+    if (error) {
+      console.error("Error loading book files:", error.message);
+    }
 
     setFileParts(
       (data || []).map((f: BookFile) => ({
@@ -111,6 +121,9 @@ export default function BooksAdminPage() {
       description_fr: item.description_fr || "",
       image_url: item.image_url || "",
       extra_image_url: item.extra_image_url || "",
+      stamp_message_es: item.stamp_message_es || "",
+      stamp_message_en: item.stamp_message_en || "",
+      stamp_message_fr: item.stamp_message_fr || "",
       is_published: item.is_published,
     });
     loadFileParts(item.id);
@@ -152,6 +165,9 @@ export default function BooksAdminPage() {
       description_fr: form.description_fr || null,
       image_url: form.image_url || null,
       extra_image_url: form.extra_image_url || null,
+      stamp_message_es: form.stamp_message_es || null,
+      stamp_message_en: form.stamp_message_en || null,
+      stamp_message_fr: form.stamp_message_fr || null,
       is_published: form.is_published,
     };
 
@@ -167,11 +183,12 @@ export default function BooksAdminPage() {
     // Save file parts
     if (bookId) {
       // Delete all existing and re-insert (simpler than diffing)
-      await supabase.from("book_files").delete().eq("book_id", bookId);
+      const { error: delError } = await supabase.from("book_files").delete().eq("book_id", bookId);
+      if (delError) console.error("Error deleting book files:", delError.message);
 
       const validParts = fileParts.filter((f) => f.file_url);
       if (validParts.length > 0) {
-        await supabase.from("book_files").insert(
+        const { error: insError } = await supabase.from("book_files").insert(
           validParts.map((f, i) => ({
             book_id: bookId,
             file_url: f.file_url,
@@ -179,6 +196,7 @@ export default function BooksAdminPage() {
             part_number: i + 1,
           }))
         );
+        if (insError) console.error("Error inserting book files:", insError.message);
       }
     }
 
@@ -209,7 +227,7 @@ export default function BooksAdminPage() {
         </button>
       </div>
 
-      <div className="bg-white border border-neutral-200 overflow-hidden">
+      <div className="bg-white border border-neutral-200">
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-neutral-50 border-b border-neutral-200">
@@ -273,7 +291,7 @@ export default function BooksAdminPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <ImageUpload
-              label="Imagen portada"
+              label="Imagen banner"
               value={form.image_url}
               onChange={(url) => setForm((f) => ({ ...f, image_url: url }))}
               folder="books"
@@ -285,6 +303,13 @@ export default function BooksAdminPage() {
               folder="books"
             />
           </div>
+
+          <LocalizedInputs
+            field="stamp_message"
+            label="Mensaje del sello (opcional)"
+            values={{ es: form.stamp_message_es, en: form.stamp_message_en, fr: form.stamp_message_fr }}
+            onChange={(lang: string, val: string) => setForm((f) => ({ ...f, [`stamp_message_${lang}`]: val }))}
+          />
 
           {/* Book file parts */}
           <div>
@@ -334,8 +359,8 @@ export default function BooksAdminPage() {
                       value={part.file_url}
                       onChange={(url) => updateFilePart(idx, { file_url: url })}
                       folder="books/files"
-                      accept=".pdf,.epub,.mobi"
-                      hint="PDF, EPUB o MOBI. Max 50MB"
+                      accept=".pdf,.odt,.epub"
+                      hint="PDF, ODT o EPUB. Max 60MB"
                     />
                   </div>
                 </div>

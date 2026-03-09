@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
   // Validate file type (by MIME and extension, some browsers misreport ODT MIME)
   const ext = file.name.split(".").pop()?.toLowerCase();
   const isDossier = folder === "dossiers";
+  const isBookFile = folder.startsWith("books/");
 
   if (isDossier) {
     // Dossiers: only PDF and ODT
@@ -31,6 +32,20 @@ export async function POST(request: NextRequest) {
     if (!dossierMimes.includes(file.type) && (!ext || !dossierExts.includes(ext))) {
       return NextResponse.json(
         { error: "Solo se permiten archivos PDF o ODT." },
+        { status: 400 }
+      );
+    }
+  } else if (isBookFile) {
+    // Book files: PDF, ODT, EPUB
+    const bookMimes = [
+      "application/pdf",
+      "application/vnd.oasis.opendocument.text",
+      "application/epub+zip",
+    ];
+    const bookExts = ["pdf", "odt", "epub"];
+    if (!bookMimes.includes(file.type) && (!ext || !bookExts.includes(ext))) {
+      return NextResponse.json(
+        { error: "Solo se permiten archivos PDF, ODT o EPUB." },
         { status: 400 }
       );
     }
@@ -46,8 +61,8 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // Max 60MB for dossiers, 10MB for images
-  const maxSize = isDossier ? 60 * 1024 * 1024 : 10 * 1024 * 1024;
+  // Max 60MB for dossiers/books, 10MB for images
+  const maxSize = isDossier || isBookFile ? 60 * 1024 * 1024 : 10 * 1024 * 1024;
   if (file.size > maxSize) {
     const maxMB = maxSize / (1024 * 1024);
     return NextResponse.json({ error: `El archivo supera los ${maxMB}MB` }, { status: 400 });
