@@ -30,8 +30,9 @@ export async function generateMetadata({
   const messages = await getMessages({ locale });
   const meta = messages.metadata as Record<string, string>;
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://rocaviva.eu";
-  const canonicalPath = locale === "es" ? "/" : `/${locale}`;
+  // Always use production URL for canonical/metadata (not localhost in dev)
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const baseUrl = envUrl && !envUrl.includes("localhost") ? envUrl : "https://rocaviva.eu";
 
   return {
     title: {
@@ -41,11 +42,11 @@ export async function generateMetadata({
     description: meta.description,
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: `${baseUrl}${canonicalPath}`,
+      canonical: locale === "es" ? "/" : `/${locale}`,
       languages: {
-        es: `${baseUrl}/`,
-        en: `${baseUrl}/en`,
-        fr: `${baseUrl}/fr`,
+        es: "/",
+        en: "/en",
+        fr: "/fr",
       },
     },
     openGraph: {

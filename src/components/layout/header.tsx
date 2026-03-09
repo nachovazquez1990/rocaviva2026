@@ -129,10 +129,8 @@ export function Header() {
                 >
                   {t(item.key)}
                   {isActive && (
-                    <motion.span
-                      layoutId="nav-underline"
-                      className={cn("absolute -bottom-0.5 left-0 right-0 h-px", isTransparentDark ? "bg-white" : "bg-brand-600")}
-                      transition={{ duration: 0.3, ease }}
+                    <span
+                      className={cn("absolute -bottom-0.5 left-0 right-0 h-px transition-colors duration-500", isTransparentDark ? "bg-white" : "bg-brand-600")}
                     />
                   )}
                 </Link>
