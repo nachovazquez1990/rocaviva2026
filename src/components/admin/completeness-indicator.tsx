@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckCircle2, AlertCircle } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 interface MissingItem {
   label: string;
@@ -16,13 +16,14 @@ export function CompletenessIndicator({ missing }: CompletenessIndicatorProps) {
   const [position, setPosition] = useState<"bottom" | "top">("bottom");
   const iconRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (showTooltip && iconRef.current) {
+  const handleMouseEnter = () => {
+    if (iconRef.current) {
       const rect = iconRef.current.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
       setPosition(spaceBelow < 150 ? "top" : "bottom");
     }
-  }, [showTooltip]);
+    setShowTooltip(true);
+  };
 
   if (missing.length === 0) {
     return (
@@ -36,7 +37,7 @@ export function CompletenessIndicator({ missing }: CompletenessIndicatorProps) {
     <div
       ref={iconRef}
       className="relative flex items-center"
-      onMouseEnter={() => setShowTooltip(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={() => setShowTooltip(false)}
     >
       <AlertCircle size={16} className="text-amber-500 cursor-help" />
