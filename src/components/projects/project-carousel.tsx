@@ -76,16 +76,26 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [next, prev]);
 
-  // Hide swipe hint after first interaction
+  // Track whether the finger actually moved during this touch so a pure tap
+  // (no touchmove) is never mistaken for a swipe — without this, stale
+  // touchEndX from a previous swipe would trigger a slide change on tap.
+  const touchMoved = useRef(false);
+
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = touchStartX.current;
+    touchMoved.current = false;
   }
 
   function handleTouchMove(e: React.TouchEvent) {
     touchEndX.current = e.touches[0].clientX;
+    if (Math.abs(touchEndX.current - touchStartX.current) > 8) {
+      touchMoved.current = true;
+    }
   }
 
   function handleTouchEnd() {
+    if (!touchMoved.current) return;
     const diff = touchStartX.current - touchEndX.current;
     if (Math.abs(diff) > 60) {
       setShowSwipeHint(false);
@@ -123,7 +133,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
 
   return (
     <section
-      className="relative h-[calc(100vh-5rem)] overflow-hidden bg-neutral-950"
+      className="relative h-[calc(100dvh-5rem)] overflow-hidden bg-neutral-950"
       aria-roledescription="carousel"
       aria-label={t("title")}
       onTouchStart={handleTouchStart}
