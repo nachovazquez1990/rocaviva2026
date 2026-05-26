@@ -7,7 +7,7 @@ import { motion, AnimatePresence, type Easing } from "framer-motion";
 import { ChevronLeft, ChevronRight, MoveHorizontal } from "lucide-react";
 import { Link } from "@/lib/i18n/navigation";
 import { getMobileImageUrl } from "@/lib/utils";
-import { MetroTimeline } from "./metro-timeline";
+import { TourStrip } from "./tour-strip";
 
 const ease: Easing = [0.16, 1, 0.3, 1];
 
@@ -189,9 +189,9 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
           {/* Overlays for readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/70" />
 
-          {/* Metro Timeline — top (z-30 to sit above the project link) */}
+          {/* Tour strip — top (z-30 to sit above the project link) */}
           <div className="absolute top-0 left-0 right-0 z-30">
-            <MetroTimeline
+            <TourStrip
               key={project.slug}
               projectSlug={project.slug}
               exhibitions={project.exhibitions}
