@@ -16,7 +16,7 @@ export function ProjectHero({ title, imageUrl, gradient }: ProjectHeroProps) {
   const mobileUrl = imageUrl ? getMobileImageUrl(imageUrl) ?? imageUrl : null;
 
   return (
-    <section className="relative h-[calc(100vh-8rem)] sm:h-[60vh] md:h-[65vh] overflow-hidden bg-neutral-950">
+    <section className="relative h-[calc(100dvh-8rem)] sm:h-[60vh] md:h-[65vh] overflow-hidden bg-neutral-950">
       {/* Background */}
       {imageUrl && mobileUrl ? (
         <>

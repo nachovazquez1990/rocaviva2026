@@ -7,7 +7,7 @@ import { motion, AnimatePresence, type Easing } from "framer-motion";
 import { ChevronLeft, ChevronRight, MoveHorizontal } from "lucide-react";
 import { Link } from "@/lib/i18n/navigation";
 import { getMobileImageUrl } from "@/lib/utils";
-import { MetroTimeline } from "./metro-timeline";
+import { TourStrip } from "./tour-strip";
 
 const ease: Easing = [0.16, 1, 0.3, 1];
 
@@ -76,16 +76,26 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [next, prev]);
 
-  // Hide swipe hint after first interaction
+  // Track whether the finger actually moved during this touch so a pure tap
+  // (no touchmove) is never mistaken for a swipe — without this, stale
+  // touchEndX from a previous swipe would trigger a slide change on tap.
+  const touchMoved = useRef(false);
+
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = touchStartX.current;
+    touchMoved.current = false;
   }
 
   function handleTouchMove(e: React.TouchEvent) {
     touchEndX.current = e.touches[0].clientX;
+    if (Math.abs(touchEndX.current - touchStartX.current) > 8) {
+      touchMoved.current = true;
+    }
   }
 
   function handleTouchEnd() {
+    if (!touchMoved.current) return;
     const diff = touchStartX.current - touchEndX.current;
     if (Math.abs(diff) > 60) {
       setShowSwipeHint(false);
@@ -123,7 +133,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
 
   return (
     <section
-      className="relative h-[calc(100vh-5rem)] overflow-hidden bg-neutral-950"
+      className="relative h-[calc(100dvh-5rem)] overflow-hidden bg-neutral-950"
       aria-roledescription="carousel"
       aria-label={t("title")}
       onTouchStart={handleTouchStart}
@@ -179,9 +189,9 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
           {/* Overlays for readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/70" />
 
-          {/* Metro Timeline — top (z-30 to sit above the project link) */}
+          {/* Tour strip — top (z-30 to sit above the project link) */}
           <div className="absolute top-0 left-0 right-0 z-30">
-            <MetroTimeline
+            <TourStrip
               key={project.slug}
               projectSlug={project.slug}
               exhibitions={project.exhibitions}
