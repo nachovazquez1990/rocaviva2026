@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { motion, AnimatePresence, type Easing } from "framer-motion";
 import { ChevronLeft, ChevronRight, MoveHorizontal } from "lucide-react";
 import { Link } from "@/lib/i18n/navigation";
+import { getMobileImageUrl } from "@/lib/utils";
 import { MetroTimeline } from "./metro-timeline";
 
 const ease: Easing = [0.16, 1, 0.3, 1];
@@ -142,16 +143,33 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
           aria-roledescription="slide"
           aria-label={`${current + 1} / ${total}: ${project.title}`}
         >
-          {/* Project image */}
+          {/* Project image — mobile + desktop variants for art direction */}
           {project.image_url ? (
-            <Image
-              src={project.image_url}
-              alt={project.title}
-              fill
-              className="object-cover"
-              priority={current === 0}
-              sizes="100vw"
-            />
+            <>
+              {(() => {
+                const mobileUrl = getMobileImageUrl(project.image_url) ?? project.image_url;
+                return (
+                  <>
+                    <Image
+                      src={mobileUrl}
+                      alt={project.title}
+                      fill
+                      className="object-cover object-top md:hidden"
+                      priority={current === 0}
+                      sizes="(max-width: 767px) 100vw, 1px"
+                    />
+                    <Image
+                      src={project.image_url}
+                      alt={project.title}
+                      fill
+                      className="object-cover object-top hidden md:block"
+                      priority={current === 0}
+                      sizes="(min-width: 768px) 100vw, 1px"
+                    />
+                  </>
+                );
+              })()}
+            </>
           ) : (
             <div
               className={`absolute inset-0 bg-gradient-to-br ${project.gradient ?? "from-neutral-800 via-neutral-900 to-accent-900"}`}

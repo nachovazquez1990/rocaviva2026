@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { getMobileImageUrl } from "@/lib/utils";
 
 type ProjectHeroProps = {
   title: string;
@@ -12,18 +13,30 @@ type ProjectHeroProps = {
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export function ProjectHero({ title, imageUrl, gradient }: ProjectHeroProps) {
+  const mobileUrl = imageUrl ? getMobileImageUrl(imageUrl) ?? imageUrl : null;
+
   return (
     <section className="relative h-[calc(100vh-8rem)] sm:h-[60vh] md:h-[65vh] overflow-hidden bg-neutral-950">
       {/* Background */}
-      {imageUrl ? (
-        <Image
-          src={imageUrl}
-          alt={title}
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
+      {imageUrl && mobileUrl ? (
+        <>
+          <Image
+            src={mobileUrl}
+            alt={title}
+            fill
+            className="object-cover object-top md:hidden"
+            priority
+            sizes="(max-width: 767px) 100vw, 1px"
+          />
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            className="object-cover object-top hidden md:block"
+            priority
+            sizes="(min-width: 768px) 100vw, 1px"
+          />
+        </>
       ) : (
         <div
           className={`absolute inset-0 bg-gradient-to-br ${gradient ?? "from-neutral-800 via-neutral-900 to-accent-900"}`}

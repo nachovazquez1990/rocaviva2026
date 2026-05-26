@@ -6,6 +6,19 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Derive the mobile variant URL of a project image by convention:
+ *   /rocaviva/projects/foo.jpg -> /rocaviva/projects/mobile/foo-m.jpg
+ * Returns null if the URL doesn't match the convention.
+ */
+export function getMobileImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  const match = url.match(/^(.+\/projects)\/([^/]+)\.(\w+)$/);
+  if (!match) return null;
+  const [, base, name, ext] = match;
+  return `${base}/mobile/${name}-m.${ext}`;
+}
+
+/**
  * Format a date string (YYYY-MM-DD or DD/MM/YYYY) for display.
  * ES/FR: dd/mm/aaaa | EN: mm/dd/yyyy
  */
