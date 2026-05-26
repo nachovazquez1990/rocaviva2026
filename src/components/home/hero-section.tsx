@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/navigation";
 import type { HomeContentMap } from "@/lib/supabase/types";
+import { HeroShapes } from "./hero-shapes";
 
 export function HeroSection({ content }: { content: HomeContentMap }) {
   const t = useTranslations("home");
@@ -15,9 +16,20 @@ export function HeroSection({ content }: { content: HomeContentMap }) {
     >
       {/* Background — static gradient, no JS animation needed */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 via-neutral-800 to-accent-900" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 via-accent-900 to-accent-950" />
       </div>
+
+      {/* Animated geometric shapes (rocaviva style) */}
+      <HeroShapes />
+
+      {/* Vignette / readability overlay above shapes, below text */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.55) 100%)",
+        }}
+      />
 
       {/* Content — immediately visible for fast LCP */}
       <div className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center">
