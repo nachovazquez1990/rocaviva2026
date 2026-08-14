@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "C:\\Users\\NVP\\AppData\\Roaming\\npm\\mcp-server-supabase.cmd",
+        "--access-token",
+        "${SUPABASE_ACCESS_TOKEN}"
+      ],
+      "env": {}
+    }
+  }
+}
